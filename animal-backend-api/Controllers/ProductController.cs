@@ -10,5 +10,5 @@ public class ProductController : BaseController
     {
         return Ok(await Mediator.Send(new GetAllProductsQuery()));
     }
-    
+
 }
