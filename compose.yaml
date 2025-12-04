@@ -1,6 +1,0 @@
-﻿services:
-  animal-backend-api:
-    image: animal-backend-api
-    build:
-      context: .
-      dockerfile: animal-backend-api/Dockerfile

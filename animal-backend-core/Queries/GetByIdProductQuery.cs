@@ -1,4 +1,3 @@
-using System;
 using animal_backend_domain.Dtos;
 using MediatR;
 
