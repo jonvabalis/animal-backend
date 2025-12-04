@@ -9,8 +9,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2"/>
+        <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.1.0" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
     </ItemGroup>
+
+     <ItemGroup>
+    <ProjectReference Include="..\animal-backend-core\animal-backend-core.csproj" />
+  </ItemGroup>
 
     <ItemGroup>
       <Content Include="..\.dockerignore">
