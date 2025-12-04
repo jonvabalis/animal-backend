@@ -16,11 +16,11 @@ public class ProductController : BaseController
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll([FromQuery] GetAllProductsQuery query)
     {
         return Ok(await Mediator.Send(new GetAllProductsQuery()));
     }
-    
+
     [HttpPost("chat")]
     public async Task<IActionResult> Chat([FromBody] string message)
     {
@@ -28,10 +28,10 @@ public class ProductController : BaseController
 
         var getAllProductsTool = ChatTool.CreateFunctionTool(
             functionName: "get_all_products",
-            functionDescription: "Get all products from the database",
-            functionParameters: BinaryData.FromString("""{"type":"object","properties":{},"required":[]}""")
+            description: "Get all products from the database",
+            parameters: BinaryData.FromString("""{"type":"object","properties":{},"required":[]}""")
         );
-        
+
         ChatCompletion initialResponse = await chatClient.CompleteChatAsync(
             messages: new ChatMessage[]
             {
@@ -44,7 +44,6 @@ public class ProductController : BaseController
             }
         );
 
-        // Use the response object directly - it has Content, ToolCalls, etc
         if (initialResponse.ToolCalls.Count == 0)
         {
             return Ok(new { reply = initialResponse.Content[0].Text });
@@ -70,7 +69,8 @@ public class ProductController : BaseController
 
         var finalText = finalResponse.Content[0].Text;
 
-        return Ok(new {
+        return Ok(new
+        {
             reply = finalText,
             productsUsed = products.Count
         });

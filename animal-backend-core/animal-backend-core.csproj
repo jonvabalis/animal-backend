@@ -13,6 +13,7 @@
 
     <ItemGroup>
     <ProjectReference Include="..\animal-backend-domain\animal-backend-domain.csproj" />
+    <ProjectReference Include="..\animal-backend-infrastructure\animal-backend-infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

@@ -2,8 +2,8 @@
 
 public enum ProductType
 {
-	Food,
-	Supplements,
-	Hygiene,
-	Medicine
+    Food,
+    Supplements,
+    Hygiene,
+    Medicine
 }
