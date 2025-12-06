@@ -1,4 +1,5 @@
 using MediatR;
+using animal_backend_domain.Types;
 
 namespace animal_backend_core.Commands
 {
@@ -6,6 +7,9 @@ namespace animal_backend_core.Commands
         Guid Id,
         string Name,
         decimal Price,
-        string? Description
-    ) : IRequest<bool>;
+        ProductType Type,
+        string? Description,
+        string Manufacturer,
+        string PhotoUrl
+    ) : IRequest<Unit>;
 }

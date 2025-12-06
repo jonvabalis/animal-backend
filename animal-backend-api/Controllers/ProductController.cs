@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using animal_backend_core.Queries;
+using animal_backend_core.Commands;
 using OpenAI.Chat;
 using OpenAI;
 using System.Text.Json;
 using System.ClientModel;
+using animal_backend_domain.Dtos;
 
 namespace animal_backend_api.Controllers;
 
@@ -19,6 +21,52 @@ public class ProductController : BaseController
     public async Task<IActionResult> GetAll([FromQuery] GetAllProductsQuery query)
     {
         return Ok(await Mediator.Send(new GetAllProductsQuery()));
+    }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById([FromRoute] Guid id)
+    {
+        return Ok(await Mediator.Send(new GetByIdProductQuery(id)));
+    }
+
+
+    [HttpPost]
+    public async Task<IActionResult> Create([FromBody] ProductInfoDto dto)
+    {
+
+        var command = new CreateProductCommand(
+            dto.Name,
+            dto.Type,
+            dto.Description,
+            dto.PhotoUrl,
+            dto.Manufacturer
+        );
+
+        return Ok(await Mediator.Send(command));
+    }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update(Guid id, [FromBody] UpdateProductCommand command)
+    {
+        var updateCommand = new UpdateProductCommand(
+            id,
+            command.Name,
+            command.Price,
+            command.Type,
+            command.Description,
+            command.PhotoUrl,
+            command.Manufacturer
+        );
+
+        await Mediator.Send(updateCommand);
+        return NoContent();
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete([FromRoute] Guid id)
+    {
+        await Mediator.Send(new DeleteProductCommand(id));
+        return NoContent();
     }
 
     [HttpPost("chat")]

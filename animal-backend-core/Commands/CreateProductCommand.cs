@@ -9,5 +9,5 @@ namespace animal_backend_core.Commands
         string PhotoUrl,
         string Description,
         string Manufacturer
-    ) : IRequest<int>;
+    ) : IRequest<Guid>;
 }
