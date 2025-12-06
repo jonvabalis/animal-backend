@@ -18,6 +18,7 @@ public class GetAllProductsQueryHandler(AnimalDbContext dbContext)
             Id = p.Id,
             Name = p.Name,
             Type = p.Type,
+            Description = p.Description,
             PhotoUrl = p.PhotoUrl,
             Manufacturer = p.Manufacturer,
         }).ToList();
