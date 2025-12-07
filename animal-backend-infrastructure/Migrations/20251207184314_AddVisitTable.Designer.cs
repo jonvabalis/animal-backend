@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using animal_backend_infrastructure;
@@ -11,9 +12,11 @@ using animal_backend_infrastructure;
 namespace animal_backend_infrastructure.Migrations
 {
     [DbContext(typeof(AnimalDbContext))]
-    partial class AnimalDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251207184314_AddVisitTable")]
+    partial class AddVisitTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -88,28 +91,6 @@ namespace animal_backend_infrastructure.Migrations
                     b.ToTable("Diseases");
                 });
 
-            modelBuilder.Entity("animal_backend_domain.Entities.Ilness", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("DateDiagnosed")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Ilnesses");
-                });
-
             modelBuilder.Entity("animal_backend_domain.Entities.Product", b =>
                 {
                     b.Property<Guid>("Id")
@@ -138,23 +119,6 @@ namespace animal_backend_infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Products");
-                });
-
-            modelBuilder.Entity("animal_backend_domain.Entities.ProductUsed", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<double>("Dosage")
-                        .HasColumnType("double precision");
-
-                    b.Property<int>("TimesPerDay")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ProductsUsed");
                 });
 
             modelBuilder.Entity("animal_backend_domain.Entities.Visit", b =>

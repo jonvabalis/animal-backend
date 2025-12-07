@@ -11,11 +11,6 @@ namespace animal_backend_api.Controllers;
 
 public class DiseaseController : BaseController
 {   
-    private readonly OpenAIClient _openAIClient;
-    public DiseaseController(OpenAIClient openAIClient)
-    {
-        _openAIClient = openAIClient;
-    }
 
     [HttpGet]
     public async Task<IActionResult> GetAll([FromQuery] GetAllDiseasesQuery query)
