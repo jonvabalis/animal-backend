@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using animal_backend_infrastructure;
@@ -11,9 +12,11 @@ using animal_backend_infrastructure;
 namespace animal_backend_infrastructure.Migrations
 {
     [DbContext(typeof(AnimalDbContext))]
-    partial class AnimalDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251207162838_AddDiseaseTable")]
+    partial class AddDiseaseTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,47 +25,7 @@ namespace animal_backend_infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("animal_backend_domain.Entities.Animal", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Breed")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("Class")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("PhotoUrl")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Species")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("SpeciesLatin")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<double>("Weight")
-                        .HasColumnType("double precision");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Animals", (string)null);
-                });
-                
-                modelBuilder.Entity("animal_backend_domain.Entities.Disease", b =>
+            modelBuilder.Entity("animal_backend_domain.Entities.Disease", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -85,7 +48,7 @@ namespace animal_backend_infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Diseases", (string)null);
+                    b.ToTable("Diseases");
                 });
 
             modelBuilder.Entity("animal_backend_domain.Entities.Product", b =>
@@ -115,7 +78,7 @@ namespace animal_backend_infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 #pragma warning restore 612, 618
         }

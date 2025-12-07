@@ -6,4 +6,7 @@ namespace animal_backend_infrastructure;
 public class AnimalDbContext(DbContextOptions<AnimalDbContext> options) : DbContext(options)
 {
     public DbSet<Product> Products { get; set; }
+
+    public DbSet<Disease> Diseases { get; set; }
+    public DbSet<Animal> Animals { get; set; }
 }
