@@ -51,7 +51,6 @@ public class ProductController : BaseController
         var updateCommand = new UpdateProductCommand(
             id,
             command.Name,
-            command.Price,
             command.Type,
             command.Description,
             command.PhotoUrl,
