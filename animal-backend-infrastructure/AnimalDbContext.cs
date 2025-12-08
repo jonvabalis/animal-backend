@@ -9,4 +9,7 @@ public class AnimalDbContext(DbContextOptions<AnimalDbContext> options) : DbCont
     public DbSet<Vaccine> Vaccines { get; set; }
     public DbSet<Disease> Diseases { get; set; }
     public DbSet<Animal> Animals { get; set; }
+    public DbSet<Visit> Visits { get; set; }
+    public DbSet<ProductUsed> ProductsUsed { get; set; }
+    public DbSet<Ilness> Ilnesses { get; set; }
 }

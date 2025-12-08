@@ -61,4 +61,8 @@ public class AnimalController: BaseController
     {
         return Ok(await Mediator.Send(new DeleteAnimalCommand(id)));
     }
+
+    // Additional endpoints related to animals (Ilnesses, ProductsUsed)
+    // Reikia padaryti, jog endpointai gražintų Produktus ir Sirgimus pagal gyvūno ID
+
 }
