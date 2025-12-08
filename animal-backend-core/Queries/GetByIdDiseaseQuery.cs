@@ -5,4 +5,3 @@ namespace animal_backend_core.Queries
 {
     public record GetByIdDiseaseQuery(Guid Id) : IRequest<DiseaseInfoDto?>;
 }
-    

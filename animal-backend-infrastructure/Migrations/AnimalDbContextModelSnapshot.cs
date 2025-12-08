@@ -59,7 +59,7 @@ namespace animal_backend_infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Animals");
+                    b.ToTable("Animals", (string)null);
                 });
 
             modelBuilder.Entity("animal_backend_domain.Entities.Disease", b =>
@@ -85,29 +85,7 @@ namespace animal_backend_infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Diseases");
-                });
-
-            modelBuilder.Entity("animal_backend_domain.Entities.Ilness", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("DateDiagnosed")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Ilnesses");
+                    b.ToTable("Diseases", (string)null);
                 });
 
             modelBuilder.Entity("animal_backend_domain.Entities.Product", b =>
@@ -137,24 +115,7 @@ namespace animal_backend_infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Products");
-                });
-
-            modelBuilder.Entity("animal_backend_domain.Entities.ProductUsed", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<double>("Dosage")
-                        .HasColumnType("double precision");
-
-                    b.Property<int>("TimesPerDay")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ProductsUsed");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("animal_backend_domain.Entities.Visit", b =>
@@ -181,7 +142,7 @@ namespace animal_backend_infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Visits");
+                    b.ToTable("Visits", (string)null);
                 });
 #pragma warning restore 612, 618
         }

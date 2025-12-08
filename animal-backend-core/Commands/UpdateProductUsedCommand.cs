@@ -1,5 +1,4 @@
 using MediatR;
-using animal_backend_domain.Types;
 
 namespace animal_backend_core.Commands
 {

@@ -8,6 +8,6 @@ namespace animal_backend_core.Commands
         string Name,
         DiseaseCategory Category,
         string LatinName,
-        string? Description
+        string Description
     ) : IRequest<Unit>;
 }

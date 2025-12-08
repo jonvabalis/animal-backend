@@ -3,5 +3,5 @@ using MediatR;
 
 namespace animal_backend_core.Queries
 {
-    public record GetByIdIlnessQuery(Guid Id) : IRequest<IlnessInfoDto?>;
+    public record GetByIdIllnessQuery(Guid Id) : IRequest<IllnessInfoDto?>;
 }

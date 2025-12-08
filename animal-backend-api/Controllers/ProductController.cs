@@ -4,19 +4,12 @@ using animal_backend_core.Commands;
 using OpenAI.Chat;
 using OpenAI;
 using System.Text.Json;
-using System.ClientModel;
 using animal_backend_domain.Dtos;
 
 namespace animal_backend_api.Controllers;
 
-public class ProductController : BaseController
-{   
-    private readonly OpenAIClient _openAIClient;
-    public ProductController(OpenAIClient openAIClient)
-    {
-        _openAIClient = openAIClient;
-    }
-
+public class ProductController(OpenAIClient openAIClient) : BaseController
+{
     [HttpGet]
     public async Task<IActionResult> GetAll([FromQuery] GetAllProductsQuery query)
     {
@@ -71,7 +64,7 @@ public class ProductController : BaseController
     [HttpPost("chat")]
     public async Task<IActionResult> Chat([FromBody] string message)
     {
-        var chatClient = _openAIClient.GetChatClient("gpt-4o");
+        var chatClient = openAIClient.GetChatClient("gpt-4o");
 
         var getAllProductsTool = ChatTool.CreateFunctionTool(
             functionName: "get_all_products",
@@ -83,7 +76,7 @@ public class ProductController : BaseController
 
         ChatCompletion initialResponse = await chatClient.CompleteChatAsync(
             messages: new ChatMessage[]
-            {   
+            {
                 ChatMessage.CreateSystemMessage(systemPrompt),
                 ChatMessage.CreateUserMessage(message)
             },

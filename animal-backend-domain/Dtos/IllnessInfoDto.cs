@@ -1,5 +1,5 @@
 namespace animal_backend_domain.Dtos;
-public class IlnessInfoDto
+public class IllnessInfoDto
 {
     public Guid Id { get; set; }
     public required string Name { get; set; }

@@ -1,5 +1,7 @@
 using animal_backend_domain.Types;
 
+namespace animal_backend_domain.Dtos;
+
 public class VisitInfoDto
 {
     public Guid Id { get; set; }

@@ -1,16 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
 using animal_backend_core.Queries;
 using animal_backend_core.Commands;
-using OpenAI.Chat;
-using OpenAI;
-using System.Text.Json;
-using System.ClientModel;
+
 using animal_backend_domain.Dtos;
 
 namespace animal_backend_api.Controllers;
 
 public class DiseaseController : BaseController
-{   
+{
 
     [HttpGet]
     public async Task<IActionResult> GetAll([FromQuery] GetAllDiseasesQuery query)
