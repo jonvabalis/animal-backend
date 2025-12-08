@@ -28,7 +28,8 @@ public class VisitController : BaseController
             dto.Start,
             dto.End,
             dto.Location,
-            (decimal)dto.Price
+            (decimal)dto.Price,
+            dto.VeterinarianUuid
         );
 
         return Ok(await Mediator.Send(command));

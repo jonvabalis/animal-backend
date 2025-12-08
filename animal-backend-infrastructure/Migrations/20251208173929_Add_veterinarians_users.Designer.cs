@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using animal_backend_infrastructure;
@@ -11,9 +12,11 @@ using animal_backend_infrastructure;
 namespace animal_backend_infrastructure.Migrations
 {
     [DbContext(typeof(AnimalDbContext))]
-    partial class AnimalDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251208173929_Add_veterinarians_users")]
+    partial class Add_veterinarians_users
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -54,15 +57,10 @@ namespace animal_backend_infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
                     b.Property<double>("Weight")
                         .HasColumnType("double precision");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Animals");
                 });
@@ -195,12 +193,7 @@ namespace animal_backend_infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid>("VeterinarianId")
-                        .HasColumnType("uuid");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("VeterinarianId");
 
                     b.ToTable("Users", (string)null);
 
@@ -229,24 +222,14 @@ namespace animal_backend_infrastructure.Migrations
                     b.Property<int>("Type")
                         .HasColumnType("integer");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("VeterinarianId")
-                        .HasColumnType("uuid");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.HasIndex("VeterinarianId");
 
                     b.ToTable("Visits");
                 });
 
             modelBuilder.Entity("animal_backend_domain.Entities.WorkHours", b =>
                 {
-                    b.Property<Guid>("VeterinarianId")
+                    b.Property<Guid>("VeterinarianUuid")
                         .HasColumnType("uuid");
 
                     b.Property<DateOnly>("Date")
@@ -258,7 +241,12 @@ namespace animal_backend_infrastructure.Migrations
                     b.Property<TimeOnly>("StartTime")
                         .HasColumnType("time without time zone");
 
-                    b.HasKey("VeterinarianId", "Date");
+                    b.Property<Guid>("VeterinarianId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("VeterinarianUuid", "Date");
+
+                    b.HasIndex("VeterinarianId");
 
                     b.ToTable("WorkHours");
                 });
@@ -300,47 +288,6 @@ namespace animal_backend_infrastructure.Migrations
                     b.ToTable("Veterinarians", (string)null);
                 });
 
-            modelBuilder.Entity("animal_backend_domain.Entities.Animal", b =>
-                {
-                    b.HasOne("animal_backend_domain.Entities.User", "User")
-                        .WithMany("Animals")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("animal_backend_domain.Entities.User", b =>
-                {
-                    b.HasOne("animal_backend_domain.Entities.Veterinarian", "Veterinarian")
-                        .WithMany()
-                        .HasForeignKey("VeterinarianId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Veterinarian");
-                });
-
-            modelBuilder.Entity("animal_backend_domain.Entities.Visit", b =>
-                {
-                    b.HasOne("animal_backend_domain.Entities.User", "User")
-                        .WithMany("Visits")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("animal_backend_domain.Entities.Veterinarian", "Veterinarian")
-                        .WithMany()
-                        .HasForeignKey("VeterinarianId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-
-                    b.Navigation("Veterinarian");
-                });
-
             modelBuilder.Entity("animal_backend_domain.Entities.WorkHours", b =>
                 {
                     b.HasOne("animal_backend_domain.Entities.Veterinarian", "Veterinarian")
@@ -359,13 +306,6 @@ namespace animal_backend_infrastructure.Migrations
                         .HasForeignKey("animal_backend_domain.Entities.Veterinarian", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("animal_backend_domain.Entities.User", b =>
-                {
-                    b.Navigation("Animals");
-
-                    b.Navigation("Visits");
                 });
 
             modelBuilder.Entity("animal_backend_domain.Entities.Veterinarian", b =>

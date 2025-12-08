@@ -12,4 +12,7 @@ public class Animal : Entity
     public required string PhotoUrl { get; set; }
     public DateTime DateOfBirth { get; set; }
     public required double Weight { get; set; }
+    
+    public Guid UserId { get; set; }
+    public User User { get; set; } = null!;
 }

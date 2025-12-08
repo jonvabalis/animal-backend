@@ -10,4 +10,5 @@ public class VisitInfoDto
     public required DateTime End { get; set; }
     public required string Location { get; set; }
     public required double Price { get; set; }
+    public required Guid VeterinarianUuid { get; set; }
 }

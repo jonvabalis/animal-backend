@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using animal_backend_infrastructure;
@@ -11,9 +12,11 @@ using animal_backend_infrastructure;
 namespace animal_backend_infrastructure.Migrations
 {
     [DbContext(typeof(AnimalDbContext))]
-    partial class AnimalDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251208180235_Add_relations_to_users_visits_veterinarians")]
+    partial class Add_relations_to_users_visits_veterinarians
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -55,6 +58,9 @@ namespace animal_backend_infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("UserUuid")
                         .HasColumnType("uuid");
 
                     b.Property<double>("Weight")
@@ -198,6 +204,9 @@ namespace animal_backend_infrastructure.Migrations
                     b.Property<Guid>("VeterinarianId")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid>("VeterinarianUuid")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
 
                     b.HasIndex("VeterinarianId");
@@ -232,7 +241,13 @@ namespace animal_backend_infrastructure.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid>("UserUuid")
+                        .HasColumnType("uuid");
+
                     b.Property<Guid>("VeterinarianId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("VeterinarianUuid")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
@@ -246,7 +261,7 @@ namespace animal_backend_infrastructure.Migrations
 
             modelBuilder.Entity("animal_backend_domain.Entities.WorkHours", b =>
                 {
-                    b.Property<Guid>("VeterinarianId")
+                    b.Property<Guid>("VeterinarianUuid")
                         .HasColumnType("uuid");
 
                     b.Property<DateOnly>("Date")
@@ -258,7 +273,12 @@ namespace animal_backend_infrastructure.Migrations
                     b.Property<TimeOnly>("StartTime")
                         .HasColumnType("time without time zone");
 
-                    b.HasKey("VeterinarianId", "Date");
+                    b.Property<Guid>("VeterinarianId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("VeterinarianUuid", "Date");
+
+                    b.HasIndex("VeterinarianId");
 
                     b.ToTable("WorkHours");
                 });

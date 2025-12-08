@@ -16,7 +16,8 @@ public class CreateVisitCommandHandler(AnimalDbContext dbContext)
             Start = request.Start,
             End = request.End,
             Location = request.Location,
-            Price = (double)request.Price
+            Price = (double)request.Price,
+            VeterinarianId = request.VeterinarianUuid
         };
 
         dbContext.Visits.Add(visit);

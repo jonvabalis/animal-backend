@@ -26,6 +26,7 @@ public class GetByIdVisitQueryHandler(AnimalDbContext dbContext)
             End = visit.End,
             Location = visit.Location,
             Price = visit.Price,
+            VeterinarianUuid = visit.VeterinarianId
         };
     }
 }

@@ -11,4 +11,9 @@ public class User : Entity
 	public required RoleType Role { get; set; }
 	public required string PhoneNumber { get; set; }
 	public required string PhotoUrl { get; set; }
+	public List<Animal>? Animals { get; set; }
+	public List<Visit>? Visits { get; set; }
+	
+	public Guid VeterinarianId { get; set; }
+	public Veterinarian Veterinarian { get; set; } = null!;
 }
