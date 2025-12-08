@@ -12,8 +12,8 @@ using animal_backend_infrastructure;
 namespace animal_backend_infrastructure.Migrations
 {
     [DbContext(typeof(AnimalDbContext))]
-    [Migration("20251207192226_AddProductUsed_and_Ilness_Table")]
-    partial class AddProductUsed_and_Ilness_Table
+    [Migration("20251208173929_Add_veterinarians_users")]
+    partial class Add_veterinarians_users
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -91,7 +91,7 @@ namespace animal_backend_infrastructure.Migrations
                     b.ToTable("Diseases");
                 });
 
-            modelBuilder.Entity("animal_backend_domain.Entities.Ilness", b =>
+            modelBuilder.Entity("animal_backend_domain.Entities.Illness", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -110,7 +110,7 @@ namespace animal_backend_infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Ilnesses");
+                    b.ToTable("Illnesses");
                 });
 
             modelBuilder.Entity("animal_backend_domain.Entities.Product", b =>
@@ -160,6 +160,46 @@ namespace animal_backend_infrastructure.Migrations
                     b.ToTable("ProductsUsed");
                 });
 
+            modelBuilder.Entity("animal_backend_domain.Entities.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("PhotoUrl")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Surname")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users", (string)null);
+
+                    b.UseTptMappingStrategy();
+                });
+
             modelBuilder.Entity("animal_backend_domain.Entities.Visit", b =>
                 {
                     b.Property<Guid>("Id")
@@ -185,6 +225,92 @@ namespace animal_backend_infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Visits");
+                });
+
+            modelBuilder.Entity("animal_backend_domain.Entities.WorkHours", b =>
+                {
+                    b.Property<Guid>("VeterinarianUuid")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateOnly>("Date")
+                        .HasColumnType("date");
+
+                    b.Property<TimeOnly>("EndTime")
+                        .HasColumnType("time without time zone");
+
+                    b.Property<TimeOnly>("StartTime")
+                        .HasColumnType("time without time zone");
+
+                    b.Property<Guid>("VeterinarianId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("VeterinarianUuid", "Date");
+
+                    b.HasIndex("VeterinarianId");
+
+                    b.ToTable("WorkHours");
+                });
+
+            modelBuilder.Entity("animal_backend_domain.Entities.Veterinarian", b =>
+                {
+                    b.HasBaseType("animal_backend_domain.Entities.User");
+
+                    b.Property<DateTime>("BirthDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Education")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("ExperienceYears")
+                        .HasColumnType("integer");
+
+                    b.Property<double>("FullTime")
+                        .HasColumnType("double precision");
+
+                    b.Property<int>("Gender")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("HireDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Rank")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Responsibilities")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<double>("Salary")
+                        .HasColumnType("double precision");
+
+                    b.ToTable("Veterinarians", (string)null);
+                });
+
+            modelBuilder.Entity("animal_backend_domain.Entities.WorkHours", b =>
+                {
+                    b.HasOne("animal_backend_domain.Entities.Veterinarian", "Veterinarian")
+                        .WithMany("WorkHours")
+                        .HasForeignKey("VeterinarianId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Veterinarian");
+                });
+
+            modelBuilder.Entity("animal_backend_domain.Entities.Veterinarian", b =>
+                {
+                    b.HasOne("animal_backend_domain.Entities.User", null)
+                        .WithOne()
+                        .HasForeignKey("animal_backend_domain.Entities.Veterinarian", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("animal_backend_domain.Entities.Veterinarian", b =>
+                {
+                    b.Navigation("WorkHours");
                 });
 #pragma warning restore 612, 618
         }

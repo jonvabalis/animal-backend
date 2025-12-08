@@ -9,4 +9,5 @@ public class Product : Entity
     public ProductType Type { get; set; }
     public required string PhotoUrl { get; set; }
     public required string Manufacturer { get; set; }
+    public List<ProductUsed>? ProductsUsed { get; set; }
 }

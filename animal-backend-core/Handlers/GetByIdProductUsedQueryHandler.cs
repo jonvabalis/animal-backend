@@ -6,16 +6,16 @@ using animal_backend_domain.Dtos;
 namespace animal_backend_core.Handlers;
 
 public class GetByIdProductUsedQueryHandler(AnimalDbContext dbContext)
-    : IRequestHandler<GetByIdProductUsedQuery, ProductUsedInfoDto>
+    : IRequestHandler<GetByIdProductUsedQuery, ProductUsedInfoDto?>
 {
-    public async Task<ProductUsedInfoDto> Handle(GetByIdProductUsedQuery request, CancellationToken cancellationToken)
+    public async Task<ProductUsedInfoDto?> Handle(GetByIdProductUsedQuery request, CancellationToken cancellationToken)
     {
         // TODO: adjust entity and mapping according to your domain model
         var productUsed = await dbContext.ProductsUsed.FindAsync(new object[] { request.Id }, cancellationToken);
 
         if (productUsed is null)
         {
-            return null!;
+            return null;
         }
 
         return new ProductUsedInfoDto

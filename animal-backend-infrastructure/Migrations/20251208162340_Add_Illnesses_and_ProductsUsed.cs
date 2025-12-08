@@ -6,13 +6,13 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace animal_backend_infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class AddProductUsed_and_Ilness_Table : Migration
+    public partial class Add_Illnesses_and_ProductsUsed : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Ilnesses",
+                name: "Illnesses",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -22,7 +22,7 @@ namespace animal_backend_infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Ilnesses", x => x.Id);
+                    table.PrimaryKey("PK_Illnesses", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -43,7 +43,7 @@ namespace animal_backend_infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Ilnesses");
+                name: "Illnesses");
 
             migrationBuilder.DropTable(
                 name: "ProductsUsed");

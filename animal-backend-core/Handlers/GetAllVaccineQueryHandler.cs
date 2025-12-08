@@ -16,8 +16,8 @@ public class GetAllVaccinesQueryHandler(AnimalDbContext dbContext)
         {
             Id = v.Id,
             Name = v.Name,
-            Category = v.Category,
-            LatinName = v.LatinName,
+            Date = v.Date,
+            Manufacturer = v.Manufacturer,
             Description = v.Description,
         }).ToList();
     }

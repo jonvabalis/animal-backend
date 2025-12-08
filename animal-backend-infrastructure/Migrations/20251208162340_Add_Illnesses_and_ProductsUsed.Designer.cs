@@ -12,8 +12,8 @@ using animal_backend_infrastructure;
 namespace animal_backend_infrastructure.Migrations
 {
     [DbContext(typeof(AnimalDbContext))]
-    [Migration("20251207185232_AddVaccineTable")]
-    partial class AddVaccineTable
+    [Migration("20251208162340_Add_Illnesses_and_ProductsUsed")]
+    partial class Add_Illnesses_and_ProductsUsed
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -91,6 +91,28 @@ namespace animal_backend_infrastructure.Migrations
                     b.ToTable("Diseases");
                 });
 
+            modelBuilder.Entity("animal_backend_domain.Entities.Illness", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("DateDiagnosed")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Illnesses");
+                });
+
             modelBuilder.Entity("animal_backend_domain.Entities.Product", b =>
                 {
                     b.Property<Guid>("Id")
@@ -121,30 +143,48 @@ namespace animal_backend_infrastructure.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("animal_backend_domain.Entities.Vaccine", b =>
+            modelBuilder.Entity("animal_backend_domain.Entities.ProductUsed", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<int>("Category")
+                    b.Property<double>("Dosage")
+                        .HasColumnType("double precision");
+
+                    b.Property<int>("TimesPerDay")
                         .HasColumnType("integer");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("LatinName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Vaccines");
+                    b.ToTable("ProductsUsed");
+                });
+
+            modelBuilder.Entity("animal_backend_domain.Entities.Visit", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("End")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("double precision");
+
+                    b.Property<DateTime>("Start")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Visits");
                 });
 #pragma warning restore 612, 618
         }

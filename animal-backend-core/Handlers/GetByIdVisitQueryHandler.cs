@@ -6,16 +6,16 @@ using animal_backend_domain.Dtos;
 namespace animal_backend_core.Handlers;
 
 public class GetByIdVisitQueryHandler(AnimalDbContext dbContext)
-    : IRequestHandler<GetByIdVisitQuery, VisitInfoDto>
+    : IRequestHandler<GetByIdVisitQuery, VisitInfoDto?>
 {
-    public async Task<VisitInfoDto> Handle(GetByIdVisitQuery request, CancellationToken cancellationToken)
+    public async Task<VisitInfoDto?> Handle(GetByIdVisitQuery request, CancellationToken cancellationToken)
     {
         // TODO: adjust entity and mapping according to your domain model
-        var visit = await dbContext.Visits.FindAsync(new object[] { request.Id }, cancellationToken);
+        var visit = await dbContext.Visits.FindAsync([request.Id], cancellationToken);
 
         if (visit is null)
         {
-            return null!;
+            return null;
         }
 
         return new VisitInfoDto
@@ -26,6 +26,7 @@ public class GetByIdVisitQueryHandler(AnimalDbContext dbContext)
             End = visit.End,
             Location = visit.Location,
             Price = visit.Price,
+            VeterinarianUuid = visit.VeterinarianId
         };
     }
 }

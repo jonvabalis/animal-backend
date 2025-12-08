@@ -1,5 +1,7 @@
 using animal_backend_domain.Types;
 
+namespace animal_backend_domain.Dtos;
+
 public class VisitInfoDto
 {
     public Guid Id { get; set; }
@@ -8,4 +10,5 @@ public class VisitInfoDto
     public required DateTime End { get; set; }
     public required string Location { get; set; }
     public required double Price { get; set; }
+    public required Guid VeterinarianUuid { get; set; }
 }

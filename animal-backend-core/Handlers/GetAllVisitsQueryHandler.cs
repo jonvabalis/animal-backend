@@ -21,6 +21,7 @@ public class GetAllVisitsQueryHandler(AnimalDbContext dbContext)
             End = v.End,
             Location = v.Location,
             Price = v.Price,
+            VeterinarianUuid = v.VeterinarianId
         }).ToList();
     }
 }

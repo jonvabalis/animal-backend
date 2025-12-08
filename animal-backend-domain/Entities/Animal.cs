@@ -12,4 +12,10 @@ public class Animal : Entity
     public required string PhotoUrl { get; set; }
     public DateTime DateOfBirth { get; set; }
     public required double Weight { get; set; }
+    public List<Illness>? Illnesses { get; set; }
+    public List<ProductUsed>? ProductsUsed { get; set; }
+    public List<Vaccine>? Vaccines { get; set; }
+    
+    public Guid UserId { get; set; }
+    public User User { get; set; } = null!;
 }

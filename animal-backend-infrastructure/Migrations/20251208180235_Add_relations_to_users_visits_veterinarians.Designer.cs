@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using animal_backend_infrastructure;
@@ -11,9 +12,11 @@ using animal_backend_infrastructure;
 namespace animal_backend_infrastructure.Migrations
 {
     [DbContext(typeof(AnimalDbContext))]
-    partial class AnimalDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251208180235_Add_relations_to_users_visits_veterinarians")]
+    partial class Add_relations_to_users_visits_veterinarians
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -55,6 +58,9 @@ namespace animal_backend_infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("UserUuid")
                         .HasColumnType("uuid");
 
                     b.Property<double>("Weight")
@@ -99,9 +105,6 @@ namespace animal_backend_infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("AnimalId")
-                        .HasColumnType("uuid");
-
                     b.Property<DateTime>("DateDiagnosed")
                         .HasColumnType("timestamp with time zone");
 
@@ -109,18 +112,11 @@ namespace animal_backend_infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("DiseaseId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AnimalId");
-
-                    b.HasIndex("DiseaseId");
 
                     b.ToTable("Illnesses");
                 });
@@ -161,23 +157,13 @@ namespace animal_backend_infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("AnimalId")
-                        .HasColumnType("uuid");
-
                     b.Property<double>("Dosage")
                         .HasColumnType("double precision");
-
-                    b.Property<Guid?>("ProductId")
-                        .HasColumnType("uuid");
 
                     b.Property<int>("TimesPerDay")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AnimalId");
-
-                    b.HasIndex("ProductId");
 
                     b.ToTable("ProductsUsed");
                 });
@@ -215,7 +201,10 @@ namespace animal_backend_infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("VeterinarianId")
+                    b.Property<Guid>("VeterinarianId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("VeterinarianUuid")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
@@ -225,37 +214,6 @@ namespace animal_backend_infrastructure.Migrations
                     b.ToTable("Users", (string)null);
 
                     b.UseTptMappingStrategy();
-                });
-
-            modelBuilder.Entity("animal_backend_domain.Entities.Vaccine", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("AnimalId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Manufacturer")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AnimalId");
-
-                    b.ToTable("Vaccines");
                 });
 
             modelBuilder.Entity("animal_backend_domain.Entities.Visit", b =>
@@ -283,7 +241,13 @@ namespace animal_backend_infrastructure.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid>("UserUuid")
+                        .HasColumnType("uuid");
+
                     b.Property<Guid>("VeterinarianId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("VeterinarianUuid")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
@@ -297,7 +261,7 @@ namespace animal_backend_infrastructure.Migrations
 
             modelBuilder.Entity("animal_backend_domain.Entities.WorkHours", b =>
                 {
-                    b.Property<Guid>("VeterinarianId")
+                    b.Property<Guid>("VeterinarianUuid")
                         .HasColumnType("uuid");
 
                     b.Property<DateOnly>("Date")
@@ -309,7 +273,12 @@ namespace animal_backend_infrastructure.Migrations
                     b.Property<TimeOnly>("StartTime")
                         .HasColumnType("time without time zone");
 
-                    b.HasKey("VeterinarianId", "Date");
+                    b.Property<Guid>("VeterinarianId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("VeterinarianUuid", "Date");
+
+                    b.HasIndex("VeterinarianId");
 
                     b.ToTable("WorkHours");
                 });
@@ -362,58 +331,15 @@ namespace animal_backend_infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("animal_backend_domain.Entities.Illness", b =>
-                {
-                    b.HasOne("animal_backend_domain.Entities.Animal", "Animal")
-                        .WithMany("Illnesses")
-                        .HasForeignKey("AnimalId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("animal_backend_domain.Entities.Disease", "Disease")
-                        .WithMany("Illnesses")
-                        .HasForeignKey("DiseaseId");
-
-                    b.Navigation("Animal");
-
-                    b.Navigation("Disease");
-                });
-
-            modelBuilder.Entity("animal_backend_domain.Entities.ProductUsed", b =>
-                {
-                    b.HasOne("animal_backend_domain.Entities.Animal", "Animal")
-                        .WithMany("ProductsUsed")
-                        .HasForeignKey("AnimalId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("animal_backend_domain.Entities.Product", "Product")
-                        .WithMany("ProductsUsed")
-                        .HasForeignKey("ProductId");
-
-                    b.Navigation("Animal");
-
-                    b.Navigation("Product");
-                });
-
             modelBuilder.Entity("animal_backend_domain.Entities.User", b =>
                 {
                     b.HasOne("animal_backend_domain.Entities.Veterinarian", "Veterinarian")
                         .WithMany()
-                        .HasForeignKey("VeterinarianId");
-
-                    b.Navigation("Veterinarian");
-                });
-
-            modelBuilder.Entity("animal_backend_domain.Entities.Vaccine", b =>
-                {
-                    b.HasOne("animal_backend_domain.Entities.Animal", "Animal")
-                        .WithMany("Vaccines")
-                        .HasForeignKey("AnimalId")
+                        .HasForeignKey("VeterinarianId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Animal");
+                    b.Navigation("Veterinarian");
                 });
 
             modelBuilder.Entity("animal_backend_domain.Entities.Visit", b =>
@@ -453,25 +379,6 @@ namespace animal_backend_infrastructure.Migrations
                         .HasForeignKey("animal_backend_domain.Entities.Veterinarian", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("animal_backend_domain.Entities.Animal", b =>
-                {
-                    b.Navigation("Illnesses");
-
-                    b.Navigation("ProductsUsed");
-
-                    b.Navigation("Vaccines");
-                });
-
-            modelBuilder.Entity("animal_backend_domain.Entities.Disease", b =>
-                {
-                    b.Navigation("Illnesses");
-                });
-
-            modelBuilder.Entity("animal_backend_domain.Entities.Product", b =>
-                {
-                    b.Navigation("ProductsUsed");
                 });
 
             modelBuilder.Entity("animal_backend_domain.Entities.User", b =>

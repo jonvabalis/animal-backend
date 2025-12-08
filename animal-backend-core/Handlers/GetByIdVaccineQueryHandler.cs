@@ -11,7 +11,7 @@ public class GetByIdVaccineQueryHandler(AnimalDbContext dbContext)
     public async Task<VaccineInfoDto?> Handle(GetByIdVaccineQuery request, CancellationToken cancellationToken)
     {
         // TODO: adjust entity and mapping according to your domain model
-        var vaccine = await dbContext.Vaccines.FindAsync(new object[] { request.Id }, cancellationToken);
+        var vaccine = await dbContext.Vaccines.FindAsync([request.Id], cancellationToken);
 
         if (vaccine is null)
         {
@@ -22,8 +22,8 @@ public class GetByIdVaccineQueryHandler(AnimalDbContext dbContext)
         {
             Id = vaccine.Id,
             Name = vaccine.Name,
-            Category = vaccine.Category,
-            LatinName = vaccine.LatinName,
+            Date = vaccine.Date,
+            Manufacturer = vaccine.Manufacturer,
             Description = vaccine.Description,
         };
     }

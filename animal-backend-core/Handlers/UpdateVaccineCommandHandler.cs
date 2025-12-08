@@ -1,6 +1,5 @@
-    using MediatR;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
-using animal_backend_domain.Dtos;
 using animal_backend_infrastructure;
 using animal_backend_core.Commands;
 namespace animal_backend_core.Handlers;
@@ -19,8 +18,8 @@ public class UpdateVaccineCommandHandler(AnimalDbContext dbContext)
         }
 
         vaccine.Name = request.Name;
-        vaccine.Category = request.Category;
-        vaccine.LatinName = request.LatinName;
+        vaccine.Date = request.Date;
+        vaccine.Manufacturer = request.Manufacturer;
         vaccine.Description = request.Description;
 
         await dbContext.SaveChangesAsync(cancellationToken);

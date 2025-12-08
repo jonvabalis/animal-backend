@@ -3,5 +3,5 @@ using animal_backend_domain.Dtos;
 
 namespace animal_backend_core.Queries
 {
-    public record GetAllIlnessesQuery : IRequest<List<IlnessInfoDto>>;
+    public record GetAllIllnessesQuery : IRequest<List<IllnessInfoDto>>;
 }

@@ -13,9 +13,9 @@ public class CreateVaccineCommandHandler(AnimalDbContext dbContext)
         {
             Id = Guid.NewGuid(),
             Name = request.Name,
-            Category = request.Category,
-            LatinName = request.LatinName,
+            Date = request.Date,
             Description = request.Description,
+            Manufacturer = request.Manufacturer
         };
 
         dbContext.Vaccines.Add(vaccine);

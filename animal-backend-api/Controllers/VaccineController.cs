@@ -1,21 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
 using animal_backend_core.Queries;
 using animal_backend_core.Commands;
-using OpenAI.Chat;
 using OpenAI;
-using System.Text.Json;
-using System.ClientModel;
 using animal_backend_domain.Dtos;
 
 namespace animal_backend_api.Controllers;
 
-public class VaccinceController : BaseController
+public class VaccineController(OpenAIClient openAIClient) : BaseController
 {   
-    private readonly OpenAIClient _openAIClient;
-    public VaccinceController(OpenAIClient openAIClient)
-    {
-        _openAIClient = openAIClient;
-    }
+    private readonly OpenAIClient _openAIClient = openAIClient;
 
     [HttpGet]
     public async Task<IActionResult> GetAll([FromQuery] GetAllVaccinesQuery query)
@@ -34,9 +27,9 @@ public class VaccinceController : BaseController
     {
         var command = new CreateVaccineCommand(
             dto.Name,
-            dto.Category,
-            dto.LatinName,
-            dto.Description
+            dto.Date,
+            dto.Description,
+            dto.Manufacturer
         );
 
         return Ok(await Mediator.Send(command));
@@ -47,9 +40,9 @@ public class VaccinceController : BaseController
         var updateCommand = new UpdateVaccineCommand(
             id,
             command.Name,
-            command.Category,
-            command.LatinName,
-            command.Description
+            command.Date,
+            command.Description,
+            command.Manufacturer
         );
 
         return Ok(await Mediator.Send(updateCommand));
