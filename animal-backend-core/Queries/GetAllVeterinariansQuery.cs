@@ -1,6 +1,7 @@
-﻿namespace animal_backend_core.Queries;
+﻿using MediatR;
+using animal_backend_domain.Dtos;
 
-public class GetAllVeterinariansQuery
+namespace animal_backend_core.Queries
 {
-
+    public record GetAllVeterinariansQuery : IRequest<List<VeterinarianInfoDto>>;
 }

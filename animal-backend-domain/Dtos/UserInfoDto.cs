@@ -1,9 +1,10 @@
-﻿using animal_backend_domain.Types;
+using animal_backend_domain.Types;
 
-namespace animal_backend_domain.Entities;
+namespace animal_backend_domain.Dtos;
 
-public class User : Entity
+public class UserInfoDto
 {
+    public Guid Id { get; set; }
 	public required string Name { get; set; }
 	public required string Surname { get; set; }
 	public required string Email { get; set; }
@@ -11,8 +12,5 @@ public class User : Entity
 	public required RoleType Role { get; set; }
 	public required string PhoneNumber { get; set; }
 	public required string PhotoUrl { get; set; }
-	public List<Animal>? Animals { get; set; }
-	public List<Visit>? Visits { get; set; }
-	public Guid? VeterinarianId { get; set; }
-	public Veterinarian? Veterinarian { get; set; }
+
 }
