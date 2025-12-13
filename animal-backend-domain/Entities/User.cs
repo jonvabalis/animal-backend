@@ -14,7 +14,6 @@ public class User : Entity
 	public required string PhotoUrl { get; set; }
 	public List<Animal>? Animals { get; set; }
 	public List<Visit>? Visits { get; set; }
-	
 	public Guid? VeterinarianId { get; set; }
 	public Veterinarian? Veterinarian { get; set; }
 }
