@@ -9,9 +9,10 @@ namespace animal_backend_core.Handlers;
 public class GetAllVeterinariansQueryHandler(AnimalDbContext dbContext)
     : IRequestHandler<GetAllVeterinariansQuery, List<VeterinarianInfoDto>>
 {
-    public async Task<List<VeterinarianInfoDto>> Handle(GetAllVeterinariansQuery query, CancellationToken cancellationToken)
+    public async Task<List<VeterinarianInfoDto>> Handle(GetAllVeterinariansQuery query,
+        CancellationToken cancellationToken)
     {
-        var veterinarians = await dbContext.Veterinarians.ToListAsync(cancellationToken);
+        var veterinarians = await dbContext.Users.Include(v => v.Veterinarian).ToListAsync(cancellationToken);
         return veterinarians.Select(v => new VeterinarianInfoDto
         {
             Name = v.Name,
@@ -22,15 +23,15 @@ public class GetAllVeterinariansQueryHandler(AnimalDbContext dbContext)
             Role = v.Role,
             PhotoUrl = v.PhotoUrl,
             Id = v.Id,
-            BirthDate = v.BirthDate,
-            Rank = v.Rank,
-            Responsibilities = v.Responsibilities,
-            Education = v.Education,
-            Salary = v.Salary,
-            FullTime = v.FullTime,
-            HireDate = v.HireDate,
-            ExperienceYears = v.ExperienceYears,
-            Gender = v.Gender
+            BirthDate = v.Veterinarian?.BirthDate ?? new DateTime(),
+            Rank = v.Veterinarian != null ? v.Veterinarian.Rank : "",
+            Responsibilities = v.Veterinarian != null ? v.Veterinarian.Responsibilities : "",
+            Education = v.Veterinarian != null ? v.Veterinarian.Education : "",
+            Salary = v.Veterinarian?.Salary ?? 0,
+            FullTime = v.Veterinarian?.FullTime ?? 0,
+            HireDate = v.Veterinarian?.HireDate ?? new DateTime(),
+            ExperienceYears = v.Veterinarian?.ExperienceYears ?? 0,
+            Gender = v.Veterinarian?.Gender ?? 0
         }).ToList();
     }
 }

@@ -22,7 +22,7 @@ public class VeterinarianController : BaseController
     }
 
     [HttpPost()]
-    public async Task<IActionResult> Create([FromBody] VeterinarianInfoDto dto)
+    public async Task<IActionResult> Create([FromBody] VeterinarianCreateDto dto)
     {
         var command = new CreateVeterinarianCommand(
             dto.Name,

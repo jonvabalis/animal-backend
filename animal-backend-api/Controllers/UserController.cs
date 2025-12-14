@@ -1,9 +1,8 @@
-using MediatR;
-using animal_backend_core.Queries;
-using animal_backend_domain.Dtos;
 using animal_backend_core.Commands;
-using animal_backend_api.Controllers;
+using animal_backend_core.Queries;
 using Microsoft.AspNetCore.Mvc;
+
+namespace animal_backend_api.Controllers;
 
 public class UserController : BaseController
 {
@@ -18,20 +17,6 @@ public class UserController : BaseController
     public async Task<IActionResult> GetById([FromRoute] Guid id)
     {
         return Ok(await Mediator.Send(new GetByIdUserQuery(id)));
-    }
-    [HttpPost]
-    public async Task<IActionResult> Create([FromBody] UserInfoDto dto)
-    {
-        var command = new CreateUserCommand(
-            dto.Name,
-            dto.Surname,
-            dto.Email,
-            dto.Password,
-            dto.Role,
-            dto.PhoneNumber,
-            dto.PhotoUrl
-        );  
-        return Ok(await Mediator.Send(command));
     }
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(Guid id, [FromBody] UpdateUserCommand command)

@@ -2,7 +2,7 @@
 
 namespace animal_backend_domain.Entities;
 
-public class Veterinarian : User
+public class Veterinarian : Entity
 {
 	public DateTime BirthDate { get; set; }
 	public required string Rank { get; set; }
