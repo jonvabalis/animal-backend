@@ -1,56 +1,133 @@
-using MediatR;
-using animal_backend_core.Queries;
-using animal_backend_domain.Dtos;
+using animal_backend_api.Security;
 using animal_backend_core.Commands;
-using animal_backend_api.Controllers;
+using animal_backend_core.Queries;
+using animal_backend_domain.Dtos.Users;
+using animal_backend_domain.Dtos.Animals;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-public class UserController : BaseController
+namespace animal_backend_api.Controllers;
+
+public class UsersController : BaseController
 {
-    
-    [HttpGet]
-    public async Task<IActionResult> GetAll([FromQuery] GetAllUsersQuery query)
+    [Authorize]
+    [HttpGet("me")]
+    public async Task<ActionResult<UserMeDto>> GetMe(CancellationToken ct)
     {
-        return Ok(await Mediator.Send(new GetAllUsersQuery()));
+        var userId = CurrentUser.GetUserId(User);
+        var dto = await Mediator.Send(new GetMyProfileQuery(userId), ct);
+        return Ok(dto);
     }
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetById([FromRoute] Guid id)
+    [Authorize]
+    [HttpPut("me")]
+    public async Task<IActionResult> UpdateMe(
+        [FromBody] UpdateMyProfileDto dto,
+        CancellationToken ct)
     {
-        return Ok(await Mediator.Send(new GetByIdUserQuery(id)));
-    }
-    [HttpPost]
-    public async Task<IActionResult> Create([FromBody] UserInfoDto dto)
-    {
-        var command = new CreateUserCommand(
+        var userId = CurrentUser.GetUserId(User);
+
+        await Mediator.Send(new UpdateMyProfileCommand(
+            userId,
             dto.Name,
             dto.Surname,
-            dto.Email,
-            dto.Password,
-            dto.Role,
             dto.PhoneNumber,
             dto.PhotoUrl
-        );  
-        return Ok(await Mediator.Send(command));
+        ), ct);
+
+        return NoContent();
     }
-    [HttpPut("{id}")]
-    public async Task<IActionResult> Update(Guid id, [FromBody] UpdateUserCommand command)
+
+    [Authorize]
+    [HttpPut("me/password")]
+    public async Task<IActionResult> ChangeMyPassword(
+        [FromBody] ChangeMyPasswordDto dto,
+        CancellationToken ct)
     {
-        var updateCommand = new UpdateUserCommand(
+        var userId = CurrentUser.GetUserId(User);
+
+        await Mediator.Send(new ChangeMyPasswordCommand(
+            userId,
+            dto.CurrentPassword,
+            dto.NewPassword
+        ), ct);
+
+        return NoContent();
+    }
+
+    [Authorize]
+    [HttpGet("me/animals")]
+    public async Task<ActionResult<List<AnimalDto>>> GetMyAnimals(CancellationToken ct)
+    {
+        var userId = CurrentUser.GetUserId(User);
+        var animals = await Mediator.Send(new GetMyAnimalsQuery(userId), ct);
+        return Ok(animals);
+    }
+
+    [Authorize]
+    [HttpPost("me/animals")]
+    public async Task<ActionResult<Guid>> CreateMyAnimal(
+        [FromBody] CreateMyAnimalDto dto,
+        CancellationToken ct)
+    {
+        var userId = CurrentUser.GetUserId(User);
+
+        var id = await Mediator.Send(new CreateMyAnimalCommand(
+            userId,
+            dto.Name,
+            dto.Class,
+            dto.PhotoUrl,
+            dto.Breed,
+            dto.Species,
+            dto.SpeciesLatin,
+            dto.DateOfBirth,
+            dto.Weight
+        ), ct);
+
+        return Ok(id);
+    }
+
+    [Authorize]
+    [HttpPut("me/animals/{id:guid}")]
+    public async Task<IActionResult> UpdateMyAnimal(
+        Guid id,
+        [FromBody] UpdateMyAnimalDto dto,
+        CancellationToken ct)
+    {
+        var userId = CurrentUser.GetUserId(User);
+
+        await Mediator.Send(new UpdateMyAnimalCommand(
+            userId,
             id,
-            command.Name,
-            command.Surname,
-            command.Email,
-            command.Password,
-            command.Role,
-            command.PhoneNumber,
-            command.PhotoUrl
-        );
-        return Ok(await Mediator.Send(updateCommand));
-    }   
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(Guid id)
+            dto.Name,
+            dto.Class,
+            dto.PhotoUrl,
+            dto.Breed,
+            dto.Species,
+            dto.SpeciesLatin,
+            dto.DateOfBirth,
+            dto.Weight
+        ), ct);
+
+        return NoContent();
+    }
+
+    [Authorize]
+    [HttpDelete("me/animals/{id:guid}")]
+    public async Task<IActionResult> DeleteMyAnimal(Guid id, CancellationToken ct)
     {
-        return Ok(await Mediator.Send(new DeleteUserCommand(id)));
+        var userId = CurrentUser.GetUserId(User);
+
+        await Mediator.Send(new DeleteMyAnimalCommand(userId, id), ct);
+        return NoContent();
+    }
+
+    [Authorize]
+    [HttpDelete("me")]
+    public async Task<IActionResult> DeleteMe(CancellationToken ct)
+    {
+        var userId = CurrentUser.GetUserId(User);
+        await Mediator.Send(new DeleteMyProfileCommand(userId), ct);
+        return NoContent();
     }
 }

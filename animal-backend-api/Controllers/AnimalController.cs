@@ -60,6 +60,6 @@ public class AnimalController : BaseController
     }
 
     // Additional endpoints related to animals (Illnesses, ProductsUsed)
-    // Reikia padaryti, jog endpointai gražintų Produktus ir Sirgimus pagal gyvūno ID
+    
     
 }
