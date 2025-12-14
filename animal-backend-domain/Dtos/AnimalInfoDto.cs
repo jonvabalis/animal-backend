@@ -14,4 +14,6 @@ public class AnimalInfoDto
     public DateTime DateOfBirth { get; set; }
 
     public required double Weight { get; set; }
+
+    public Guid OwnerId { get; set; }
 }

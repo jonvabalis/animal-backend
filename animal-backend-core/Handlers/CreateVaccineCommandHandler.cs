@@ -12,6 +12,7 @@ public class CreateVaccineCommandHandler(AnimalDbContext dbContext)
         var vaccine = new animal_backend_domain.Entities.Vaccine
         {
             Id = Guid.NewGuid(),
+            AnimalId = request.AnimalId,
             Name = request.Name,
             Date = request.Date,
             Description = request.Description,

@@ -12,6 +12,7 @@ public class CreateProductUsedCommandHandler(AnimalDbContext dbContext)
         var productUsed = new animal_backend_domain.Entities.ProductUsed
         {
             Id = Guid.NewGuid(),
+            AnimalId = request.AnimalId,
             Dosage = request.Dosage,
             TimesPerDay = request.TimesPerDay
         };

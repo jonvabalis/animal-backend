@@ -20,10 +20,12 @@ public class GetByIdIllnessQueryHandler(AnimalDbContext dbContext)
 
         return new IllnessInfoDto
         {
+            AnimalId = illness.AnimalId,
             Id = illness.Id,
             Name = illness.Name,
             Description = illness.Description,
             DateDiagnosed = illness.DateDiagnosed,
+            DiseaseId = illness.DiseaseId
         };
     }
 }
