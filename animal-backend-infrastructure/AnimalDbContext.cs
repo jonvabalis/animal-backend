@@ -18,7 +18,7 @@ public class AnimalDbContext(DbContextOptions<AnimalDbContext> options) : DbCont
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<WorkHours>()
-            .HasKey(wh => new { wh.VeterinarianId, wh.Date });
+            .HasKey(wh => new { wh.VeterinarianId, wh.Date, wh.Hour });
         
         modelBuilder.Entity<User>().ToTable("Users");
         modelBuilder.Entity<Veterinarian>().ToTable("Veterinarians");

@@ -54,4 +54,17 @@ public class VisitController : BaseController
     {
         return Ok(await Mediator.Send(new DeleteVisitCommand(id)));
     }
+    
+    [HttpPost("workday")]
+    public async Task<IActionResult> CreateWorkday([FromBody] CreateWorkday dto)
+    {
+        var command = new CreateVeterinarianWorkdayCommand(
+            dto.VeterinarianId,
+            dto.Date,
+            dto.StartHour,
+            dto.EndHour
+        );
+
+        return Ok(await Mediator.Send(command));
+    }
 }
