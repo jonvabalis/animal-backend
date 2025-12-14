@@ -8,7 +8,6 @@ namespace animal_backend_api.Controllers;
 
 public class VaccineController(OpenAIClient openAIClient) : BaseController
 {   
-    private readonly OpenAIClient _openAIClient = openAIClient;
 
     [HttpGet]
     public async Task<IActionResult> GetAll([FromQuery] GetAllVaccinesQuery query)
