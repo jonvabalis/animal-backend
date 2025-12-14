@@ -8,7 +8,7 @@ namespace animal_backend_core.Commands
         string Name,
         ProductType Type,
         string? Description,
-        string Manufacturer,
-        string PhotoUrl
+        string PhotoUrl,
+        string Manufacturer
     ) : IRequest<Unit>;
 }
