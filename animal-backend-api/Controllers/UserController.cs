@@ -72,6 +72,8 @@ public class UsersController : BaseController
     {
         var userId = CurrentUser.GetUserId(User);
 
+        var dateOfBirthUtc = DateTime.SpecifyKind(dto.DateOfBirth, DateTimeKind.Utc);
+
         var id = await Mediator.Send(new CreateMyAnimalCommand(
             userId,
             dto.Name,
@@ -80,7 +82,7 @@ public class UsersController : BaseController
             dto.Breed,
             dto.Species,
             dto.SpeciesLatin,
-            dto.DateOfBirth,
+            dateOfBirthUtc,
             dto.Weight
         ), ct);
 
@@ -96,6 +98,8 @@ public class UsersController : BaseController
     {
         var userId = CurrentUser.GetUserId(User);
 
+        var dateOfBirthUtc = DateTime.SpecifyKind(dto.DateOfBirth, DateTimeKind.Utc);
+
         await Mediator.Send(new UpdateMyAnimalCommand(
             userId,
             id,
@@ -105,7 +109,7 @@ public class UsersController : BaseController
             dto.Breed,
             dto.Species,
             dto.SpeciesLatin,
-            dto.DateOfBirth,
+            dateOfBirthUtc,
             dto.Weight
         ), ct);
 

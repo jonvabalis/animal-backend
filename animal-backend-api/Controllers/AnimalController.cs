@@ -24,27 +24,48 @@ public class AnimalController : BaseController
     }
 
     [HttpPost("{animalId:guid}/vaccines")]
-    public async Task<IActionResult> CreateVaccine([FromRoute] Guid animalId, [FromBody] VaccineInfoDto dto)
+    public async Task<IActionResult> CreateVaccine([FromRoute] Guid animalId, [FromBody] Models.CreateVaccineRequest dto)
     {
+        // Accept date as a flexible string from clients and parse to UTC.
+        DateTime dateUtc;
+        if (!string.IsNullOrWhiteSpace(dto?.Date) && DateTime.TryParse(dto.Date, out var parsed))
+        {
+            dateUtc = DateTime.SpecifyKind(parsed, DateTimeKind.Utc);
+        }
+        else
+        {
+            dateUtc = DateTime.UtcNow;
+        }
+
         var command = new CreateVaccineCommand(
-            dto.Name,
-            dto.Date,
-            dto.Description,
-            dto.Manufacturer,
+            dto?.Name ?? string.Empty,
+            dateUtc,
+            dto?.Description ?? string.Empty,
+            dto?.Manufacturer ?? string.Empty,
             animalId
         );
 
         return Ok(await Mediator.Send(command));
     }
     [HttpPut("{animalId:guid}/vaccines/{id:guid}")]
-    public async Task<IActionResult> UpdateVaccine(Guid animalId, Guid id, [FromBody] UpdateVaccineCommand command)
+    public async Task<IActionResult> UpdateVaccine(Guid animalId, Guid id, [FromBody] Models.UpdateVaccineRequest dto)
     {
+        DateTime dateUtc;
+        if (!string.IsNullOrWhiteSpace(dto?.Date) && DateTime.TryParse(dto.Date, out var parsed))
+        {
+            dateUtc = DateTime.SpecifyKind(parsed, DateTimeKind.Utc);
+        }
+        else
+        {
+            dateUtc = DateTime.UtcNow;
+        }
+
         var updateCommand = new UpdateVaccineCommand(
             id,
-            command.Name,
-            command.Date,
-            command.Description,
-            command.Manufacturer, 
+            dto?.Name ?? string.Empty,
+            dateUtc,
+            dto?.Description ?? string.Empty,
+            dto?.Manufacturer ?? string.Empty,
             animalId
         );
 

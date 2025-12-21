@@ -18,7 +18,7 @@ public class UpdateVaccineCommandHandler(AnimalDbContext dbContext)
         }
 
         vaccine.Name = request.Name;
-        vaccine.Date = request.Date;
+        vaccine.Date = DateTime.SpecifyKind(request.Date, DateTimeKind.Utc);
         vaccine.Manufacturer = request.Manufacturer;
         vaccine.Description = request.Description;
 

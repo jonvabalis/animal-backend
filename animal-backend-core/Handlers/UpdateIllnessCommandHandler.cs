@@ -19,7 +19,7 @@ public class UpdateIllnessCommandHandler(AnimalDbContext dbContext)
 
         illness.Description = request.Description;
         illness.Name = request.Name;
-        illness.DateDiagnosed = request.DateDiagnosed;
+        illness.DateDiagnosed = DateTime.SpecifyKind(request.DateDiagnosed, DateTimeKind.Utc);
         illness.DiseaseId = request.DiseaseId;
 
         await dbContext.SaveChangesAsync(cancellationToken);
