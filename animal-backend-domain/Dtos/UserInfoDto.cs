@@ -12,5 +12,5 @@ public class UserInfoDto
 	public required RoleType Role { get; set; }
 	public required string PhoneNumber { get; set; }
 	public required string PhotoUrl { get; set; }
-
+	public Guid? VeterinarianGuid { get; set; }
 }

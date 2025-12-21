@@ -13,7 +13,9 @@ public class CreateProductUsedCommandHandler(AnimalDbContext dbContext)
         {
             Id = Guid.NewGuid(),
             Dosage = request.Dosage,
-            TimesPerDay = request.TimesPerDay
+            TimesPerDay = request.TimesPerDay,
+            AnimalId = request.AnimalId,
+            ProductId = request.ProductId
         };
 
         dbContext.ProductsUsed.Add(productUsed);

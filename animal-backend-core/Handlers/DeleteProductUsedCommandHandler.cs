@@ -10,7 +10,7 @@ public class DeleteProductUsedCommandHandler(AnimalDbContext dbContext)
     public async Task<Unit> Handle(DeleteProductUsedCommand request, CancellationToken cancellationToken)
     {
         var productUsed = await dbContext.ProductsUsed
-            .FirstOrDefaultAsync(p => p.Id == request.Id, cancellationToken);
+            .FirstOrDefaultAsync(p => p.Id == request.Id && p.AnimalId == request.AnimalId, cancellationToken);
 
         if (productUsed is null)
         {

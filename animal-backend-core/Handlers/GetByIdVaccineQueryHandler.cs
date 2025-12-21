@@ -1,6 +1,7 @@
 using animal_backend_infrastructure;
 using MediatR;
 using animal_backend_core.Queries;
+using Microsoft.EntityFrameworkCore;
 using animal_backend_domain.Dtos;
 
 namespace animal_backend_core.Handlers;
@@ -10,8 +11,9 @@ public class GetByIdVaccineQueryHandler(AnimalDbContext dbContext)
 {
     public async Task<VaccineInfoDto?> Handle(GetByIdVaccineQuery request, CancellationToken cancellationToken)
     {
-        // TODO: adjust entity and mapping according to your domain model
-        var vaccine = await dbContext.Vaccines.FindAsync([request.Id], cancellationToken);
+        var vaccine = await dbContext.Vaccines
+            .Where(v => v.AnimalId == request.animalId && v.Id == request.Id)
+            .FirstOrDefaultAsync(cancellationToken);
 
         if (vaccine is null)
         {

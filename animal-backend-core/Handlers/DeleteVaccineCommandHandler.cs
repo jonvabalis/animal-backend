@@ -10,7 +10,7 @@ public class DeleteVaccineCommandHandler(AnimalDbContext dbContext)
     public async Task<Unit> Handle(DeleteVaccineCommand request, CancellationToken cancellationToken)
     {
         var vaccine = await dbContext.Vaccines
-            .FirstOrDefaultAsync(p => p.Id == request.Id, cancellationToken);
+            .FirstOrDefaultAsync(p => p.Id == request.Id && p.AnimalId == request.animalId, cancellationToken);
 
         if (vaccine is null)
         {

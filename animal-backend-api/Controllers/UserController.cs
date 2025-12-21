@@ -112,7 +112,6 @@ public class UsersController : BaseController
         return NoContent();
     }
 
-    [Authorize]
     [HttpDelete("me/animals/{id:guid}")]
     public async Task<IActionResult> DeleteMyAnimal(Guid id, CancellationToken ct)
     {

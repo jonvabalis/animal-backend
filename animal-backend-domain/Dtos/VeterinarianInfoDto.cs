@@ -4,7 +4,6 @@ namespace animal_backend_domain.Dtos;
 
 public class VeterinarianInfoDto : UserInfoDto
 {
-    public Guid Id { get; set; }
 	public DateTime BirthDate { get; set; }
 	public required string Rank { get; set; }
 	public required string Responsibilities { get; set; }

@@ -11,13 +11,14 @@ public class GetAllProductsUsedQueryHandler(AnimalDbContext dbContext)
 {
     public async Task<List<ProductUsedInfoDto>> Handle(GetAllProductsUsedQuery query, CancellationToken cancellationToken)
     {
-        var productsUsed = await dbContext.ProductsUsed.ToListAsync(cancellationToken);
+        var productsUsed = await dbContext.ProductsUsed.Where(p => p.AnimalId == query.AnimalId).ToListAsync(cancellationToken);
 
         return productsUsed.Select(p => new ProductUsedInfoDto
         {
             Id = p.Id,
             Dosage = p.Dosage,
             TimesPerDay = p.TimesPerDay,
+            ProductId = p.ProductId
         }).ToList();
     }
 }

@@ -9,13 +9,15 @@ public class CreateVaccineCommandHandler(AnimalDbContext dbContext)
 {
     public async Task<Guid> Handle(CreateVaccineCommand request, CancellationToken cancellationToken)
     {
+        
         var vaccine = new animal_backend_domain.Entities.Vaccine
         {
             Id = Guid.NewGuid(),
             Name = request.Name,
             Date = request.Date,
             Description = request.Description,
-            Manufacturer = request.Manufacturer
+            Manufacturer = request.Manufacturer,
+            AnimalId = request.AnimalId
         };
 
         dbContext.Vaccines.Add(vaccine);

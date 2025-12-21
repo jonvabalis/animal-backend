@@ -3,63 +3,156 @@ using animal_backend_core.Queries;
 using animal_backend_core.Commands;
 
 using animal_backend_domain.Dtos;
+using animal_backend_domain.Entities;
 
 namespace animal_backend_api.Controllers;
 
 public class AnimalController : BaseController
 {
-    [HttpGet]
-    public async Task<IActionResult> GetAll([FromQuery] GetAllAnimalsQuery query)
+    // Additional endpoints related to animals (Illnesses, ProductsUsed, vaccines)
+    
+    [HttpGet("{animalId:guid}/vaccines")]
+    public async Task<IActionResult> GetAllVaccines([FromRoute] Guid animalId)
     {
-        return Ok(await Mediator.Send(query));
+        return Ok(await Mediator.Send(new GetAllVaccinesQuery(animalId)));
     }
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetById([FromRoute] Guid id)
+    [HttpGet("{animalId:guid}/vaccines/{id:guid}")]
+    public async Task<IActionResult> GetByIdVaccine([FromRoute] Guid animalId, [FromRoute] Guid id)
     {
-        return Ok(await Mediator.Send(new GetByIdAnimalQuery(id)));
+        return Ok(await Mediator.Send(new GetByIdVaccineQuery(animalId, id)));
     }
 
-    [HttpPost]
-    public async Task<IActionResult> Create([FromBody] AnimalInfoDto dto)
+    [HttpPost("{animalId:guid}/vaccines")]
+    public async Task<IActionResult> CreateVaccine([FromRoute] Guid animalId, [FromBody] VaccineInfoDto dto)
     {
-        var command = new CreateAnimalCommand(
+        var command = new CreateVaccineCommand(
             dto.Name,
-            dto.Class,
-            dto.PhotoUrl,
-            dto.Breed,
-            dto.Species,
-            dto.SpeciesLatin,
-            dto.DateOfBirth,
-            dto.Weight
+            dto.Date,
+            dto.Description,
+            dto.Manufacturer,
+            animalId
         );
 
         return Ok(await Mediator.Send(command));
     }
-    [HttpPut("{id}")]
-    public async Task<IActionResult> Update(Guid id, [FromBody] UpdateAnimalCommand command)
+    [HttpPut("{animalId:guid}/vaccines/{id:guid}")]
+    public async Task<IActionResult> UpdateVaccine(Guid animalId, Guid id, [FromBody] UpdateVaccineCommand command)
     {
-        var updateCommand = new UpdateAnimalCommand(
+        var updateCommand = new UpdateVaccineCommand(
             id,
             command.Name,
-            command.Class,
-            command.PhotoUrl,
-            command.Breed,
-            command.Species,
-            command.SpeciesLatin,
-            command.DateOfBirth,
-            command.Weight
+            command.Date,
+            command.Description,
+            command.Manufacturer, 
+            animalId
         );
 
         return Ok(await Mediator.Send(updateCommand));
     }
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete([FromRoute] Guid id)
+
+    [HttpDelete("{animalId:guid}/vaccines/{id:guid}")]
+    public async Task<IActionResult> DeleteVaccine(Guid animalId, Guid id)
     {
-        return Ok(await Mediator.Send(new DeleteAnimalCommand(id)));
+        return Ok(await Mediator.Send(new DeleteVaccineCommand(animalId, id)));
+    }
+    
+
+    ////////////////////////////////////////////////////////////
+    /// Sirgimas - Illnesses
+    /// //////////////////////////////////////////////////////////
+    
+     [HttpGet("{animalId:guid}/illnesses")]
+    public async Task<IActionResult> GetAllIllnesses([FromRoute] Guid animalId)
+    {
+        return Ok(await Mediator.Send(new GetAllIllnessesQuery(animalId)));
     }
 
-    // Additional endpoints related to animals (Illnesses, ProductsUsed)
+    [HttpGet("{animalId:guid}/illnesses/{id:guid}")]
+    public async Task<IActionResult> GetByIdIllness([FromRoute] Guid animalId, [FromRoute] Guid id)
+    {
+        return Ok(await Mediator.Send(new GetByIdIllnessQuery(animalId, id)));
+    }
+
+    [HttpPost("{animalId:guid}/illnesses")]
+    public async Task<IActionResult> CreateIllness([FromRoute] Guid animalId, [FromBody] IllnessInfoDto dto)
+    {
+        var command = new CreateIllnessCommand(
+            dto.Name,
+            dto.Description,        
+            dto.DateDiagnosed,
+            animalId,
+            dto.DiseaseId
+        );
+
+        return Ok(await Mediator.Send(command));
+    }
+    [HttpPut("{animalId:guid}/illnesses/{id:guid}")]
+    public async Task<IActionResult> UpdateIllness(Guid animalId, Guid id, [FromBody] UpdateIllnessCommand command)
+    {
+        var updateCommand = new UpdateIllnessCommand(
+            id,
+            command.Name,
+            command.Description,        
+            command.DateDiagnosed,
+            animalId,
+            command.DiseaseId
+        );
+
+        return Ok(await Mediator.Send(updateCommand));
+    }
+
+    [HttpDelete("{animalId:guid}/illnesses/{id:guid}")]
+    public async Task<IActionResult> DeleteIllness(Guid animalId, Guid id)
+    {
+        return Ok(await Mediator.Send(new DeleteIllnessCommand(animalId, id)));
+    }
+
+
+    ////////////////////////////////////////////////////////////
+    /// Naudojami produktai - ProductsUsed
+    /// //////////////////////////////////////////////////////////
+    /// 
     
-    
+    [HttpGet("{animalId:guid}/productused")]
+    public async Task<IActionResult> GetAllProductUsed([FromRoute] Guid animalId)
+    {
+        return Ok(await Mediator.Send(new GetAllProductsUsedQuery(animalId)));
+    }
+
+    [HttpGet("{animalId:guid}/productused/{id:guid}")]
+    public async Task<IActionResult> GetByIdProductUsed([FromRoute] Guid animalId, [FromRoute] Guid id)
+    {
+        return Ok(await Mediator.Send(new GetByIdProductUsedQuery(animalId, id)));
+    }
+    [HttpPost("{animalId:guid}/productused")]
+    public async Task<IActionResult> CreateProductUsed([FromRoute] Guid animalId, [FromBody] ProductUsedInfoDto dto)
+    {
+        var command = new CreateProductUsedCommand(
+            dto.Dosage,
+            dto.TimesPerDay,
+            animalId,
+            dto.ProductId
+        );  
+        return Ok(await Mediator.Send(command));
+    }
+
+    [HttpPut("{animalId:guid}/productused/{id:guid}")]
+    public async Task<IActionResult> UpdateProductUsed(Guid animalId, Guid id, [FromBody] UpdateProductUsedCommand command)
+    {
+        var updateCommand = new UpdateProductUsedCommand(
+            id,
+            command.Dosage,
+            command.TimesPerDay,
+            animalId,
+            command.ProductId
+        );
+        return Ok(await Mediator.Send(updateCommand));
+    }
+
+    [HttpDelete("{animalId:guid}/productused/{id:guid}")]
+    public async Task<IActionResult> DeleteProductUsed(Guid animalId, Guid id)
+    {
+        return Ok(await Mediator.Send(new DeleteProductUsedCommand(animalId, id)));
+    }
 }

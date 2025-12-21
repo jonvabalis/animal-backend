@@ -12,7 +12,7 @@ public class GetAllVeterinariansQueryHandler(AnimalDbContext dbContext)
     public async Task<List<VeterinarianInfoDto>> Handle(GetAllVeterinariansQuery query,
         CancellationToken cancellationToken)
     {
-        var veterinarians = await dbContext.Users.Include(v => v.Veterinarian).ToListAsync(cancellationToken);
+        var veterinarians = await dbContext.Users.Include(v => v.Veterinarian).Where(v => v.Veterinarian != null).ToListAsync(cancellationToken);
         return veterinarians.Select(v => new VeterinarianInfoDto
         {
             Name = v.Name,
@@ -23,6 +23,7 @@ public class GetAllVeterinariansQueryHandler(AnimalDbContext dbContext)
             Role = v.Role,
             PhotoUrl = v.PhotoUrl,
             Id = v.Id,
+            VeterinarianGuid = v.VeterinarianId,
             BirthDate = v.Veterinarian?.BirthDate ?? new DateTime(),
             Rank = v.Veterinarian != null ? v.Veterinarian.Rank : "",
             Responsibilities = v.Veterinarian != null ? v.Veterinarian.Responsibilities : "",
