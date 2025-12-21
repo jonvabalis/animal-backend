@@ -7,6 +7,16 @@ namespace animal_backend_core.Handlers;
 public class UpdateVeterinarianCommandHandler(AnimalDbContext dbContext)
     : IRequestHandler<UpdateVeterinarianCommand, Unit>
 {
+    private static DateTime NormalizeToUtc(DateTime value)
+    {
+        return value.Kind switch
+        {
+            DateTimeKind.Utc => value,
+            DateTimeKind.Local => value.ToUniversalTime(),
+            _ => DateTime.SpecifyKind(value, DateTimeKind.Utc)
+        };
+    }
+
     public async Task<Unit> Handle(UpdateVeterinarianCommand request, CancellationToken cancellationToken)
     {
         var veterinarian = await dbContext.Veterinarians
@@ -17,13 +27,13 @@ public class UpdateVeterinarianCommandHandler(AnimalDbContext dbContext)
             throw new KeyNotFoundException($"Veterinarian with ID {request.Id} not found");
         }
         
-        veterinarian.BirthDate = request.BirthDate;
+        veterinarian.BirthDate = NormalizeToUtc(request.BirthDate);
         veterinarian.Rank = request.Rank;
         veterinarian.Responsibilities = request.Responsibilities;
         veterinarian.Education = request.Education;
         veterinarian.Salary = request.Salary;
         veterinarian.FullTime = request.FullTime;
-        veterinarian.HireDate = request.HireDate;
+        veterinarian.HireDate = NormalizeToUtc(request.HireDate);
         veterinarian.ExperienceYears = request.ExperienceYears;
         veterinarian.Gender = request.Gender;
 

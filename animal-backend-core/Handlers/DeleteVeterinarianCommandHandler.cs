@@ -9,15 +9,23 @@ public class DeleteVeterinarianCommandHandler(AnimalDbContext dbContext)
 {
     public async Task<Unit> Handle(DeleteVeterinarianCommand request, CancellationToken cancellationToken)
     {
-        var veterinarian = await dbContext.Veterinarians
-            .FirstOrDefaultAsync(p => p.Id == request.Id, cancellationToken);
+        // Find the user with this veterinarian ID
+        var user = await dbContext.Users
+            .Include(u => u.Veterinarian)
+            .FirstOrDefaultAsync(u => u.VeterinarianId == request.Id, cancellationToken);
 
-        if (veterinarian is null)
+        if (user is null)
         {
             throw new KeyNotFoundException($"Veterinarian with ID {request.Id} not found");
         }
 
-        dbContext.Veterinarians.Remove(veterinarian);
+        // Remove both user and veterinarian (cascade will handle veterinarian if configured)
+        dbContext.Users.Remove(user);
+        if (user.Veterinarian != null)
+        {
+            dbContext.Veterinarians.Remove(user.Veterinarian);
+        }
+        
         await dbContext.SaveChangesAsync(cancellationToken);
 
         return Unit.Value;
