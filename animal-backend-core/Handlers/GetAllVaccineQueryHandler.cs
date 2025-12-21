@@ -11,7 +11,10 @@ public class GetAllVaccinesQueryHandler(AnimalDbContext dbContext)
 {
     public async Task<List<VaccineInfoDto>> Handle(GetAllVaccinesQuery query, CancellationToken cancellationToken)
     {
-        var vaccines = await dbContext.Vaccines.ToListAsync(cancellationToken);
+        
+        var vaccines = await dbContext.Vaccines
+            .Where(v => v.AnimalId == query.animalId)
+            .ToListAsync(cancellationToken);
         return vaccines.Select(v => new VaccineInfoDto
         {
             Id = v.Id,

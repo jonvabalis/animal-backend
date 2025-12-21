@@ -10,7 +10,7 @@ public class UpdateIllnessCommandHandler(AnimalDbContext dbContext)
     public async Task<Unit> Handle(UpdateIllnessCommand request, CancellationToken cancellationToken)
     {
         var illness = await dbContext.Illnesses
-            .FirstOrDefaultAsync(v => v.Id == request.Id, cancellationToken);
+            .FirstOrDefaultAsync(v => v.Id == request.Id && v.AnimalId == request.AnimalId, cancellationToken);
 
         if (illness is null)
         {
@@ -20,6 +20,7 @@ public class UpdateIllnessCommandHandler(AnimalDbContext dbContext)
         illness.Description = request.Description;
         illness.Name = request.Name;
         illness.DateDiagnosed = request.DateDiagnosed;
+        illness.DiseaseId = request.DiseaseId;
 
         await dbContext.SaveChangesAsync(cancellationToken);
 

@@ -6,4 +6,6 @@ public class IllnessInfoDto
     public required string Description { get; set; }
     public DateTime DateDiagnosed { get; set; }
 
+    public Guid AnimalId { get; set; }
+    public Guid? DiseaseId { get; set; }
 }

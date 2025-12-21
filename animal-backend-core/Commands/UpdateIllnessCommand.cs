@@ -6,6 +6,8 @@ namespace animal_backend_core.Commands
         Guid Id,
         string Name,
         string Description,
-        DateTime DateDiagnosed
+        DateTime DateDiagnosed,
+        Guid AnimalId,
+        Guid? DiseaseId
     ) : IRequest<Unit>;
 }
