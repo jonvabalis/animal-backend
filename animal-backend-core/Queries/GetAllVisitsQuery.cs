@@ -3,5 +3,5 @@ using MediatR;
 
 namespace animal_backend_core.Queries
 {
-    public record GetAllVisitsQuery : IRequest<List<VisitInfoDto>>;
+    public record GetAllVisitsQuery(Guid UserId) : IRequest<List<VisitInfoDto>>;
 }

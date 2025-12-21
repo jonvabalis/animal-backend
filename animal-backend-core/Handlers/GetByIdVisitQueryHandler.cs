@@ -10,7 +10,6 @@ public class GetByIdVisitQueryHandler(AnimalDbContext dbContext)
 {
     public async Task<VisitInfoDto?> Handle(GetByIdVisitQuery request, CancellationToken cancellationToken)
     {
-        // TODO: adjust entity and mapping according to your domain model
         var visit = await dbContext.Visits.FindAsync([request.Id], cancellationToken);
 
         if (visit is null)

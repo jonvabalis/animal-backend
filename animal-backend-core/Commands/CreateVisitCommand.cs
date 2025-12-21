@@ -9,6 +9,7 @@ namespace animal_backend_core.Commands
         DateTime End,
         string Location,
         decimal Price,
-        Guid VeterinarianUuid
+        Guid VeterinarianUuid,
+        Guid UserUuid
     ) : IRequest<Guid>;
 }

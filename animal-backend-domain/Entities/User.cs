@@ -1,5 +1,4 @@
-﻿using System.Dynamic;
-using animal_backend_domain.Types;
+﻿using animal_backend_domain.Types;
 
 namespace animal_backend_domain.Entities;
 

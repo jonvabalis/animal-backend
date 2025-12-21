@@ -12,7 +12,7 @@ public class VisitController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetAll([FromQuery] GetAllVisitsQuery query)
     {
-        return Ok(await Mediator.Send(new GetAllVisitsQuery()));
+        return Ok(await Mediator.Send(query));
     }
 
     [HttpGet("{id}")]
@@ -22,30 +22,30 @@ public class VisitController : BaseController
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] VisitInfoDto dto)
+    public async Task<IActionResult> Create([FromBody] CreateVisitCommand request)
     {
         var command = new CreateVisitCommand(
-            dto.Type,
-            dto.Start,
-            dto.End,
-            dto.Location,
-            (decimal)dto.Price,
-            dto.VeterinarianUuid
-        );
+            request.Type,
+            request.Start,
+            request.End,
+            request.Location,
+            request.Price,
+            request.VeterinarianUuid,
+            request.UserUuid);
 
         return Ok(await Mediator.Send(command));
     }
+    
+    [HttpPost("cancel")]
+    public async Task<IActionResult> Cancel([FromBody] CancelVisitCommand command)
+    {
+        return Ok(await Mediator.Send(command));
+    }
+    
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(Guid id, [FromBody] UpdateVisitCommand command)
     {
-        var updateCommand = new UpdateVisitCommand(
-            id,
-            command.Type,
-            command.Start,
-            command.End,
-            command.Location,
-            command.Price
-        );
+        var updateCommand = command with { Id = id };
 
         return Ok(await Mediator.Send(updateCommand));
     }

@@ -9,6 +9,11 @@ public class UpdateVisitCommandHandler(AnimalDbContext dbContext)
 {
     public async Task<Unit> Handle(UpdateVisitCommand request, CancellationToken cancellationToken)
     {
+        if (request.Start > request.End || request.Start > DateTime.Now)
+        {
+            throw new InvalidOperationException("Invalid start or end hour.");
+        }
+        
         var visit = await dbContext.Visits
             .FirstOrDefaultAsync(v => v.Id == request.Id, cancellationToken);
 

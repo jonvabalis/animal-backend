@@ -11,7 +11,7 @@ public class GetAllVisitsQueryHandler(AnimalDbContext dbContext)
 {
     public async Task<List<VisitInfoDto>> Handle(GetAllVisitsQuery query, CancellationToken cancellationToken)
     {
-        var visits = await dbContext.Visits.ToListAsync(cancellationToken);
+        var visits = await dbContext.Visits.Where(v => v.UserId == query.UserId).ToListAsync(cancellationToken);
 
         return visits.Select(v => new VisitInfoDto
         {
