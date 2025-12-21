@@ -9,7 +9,7 @@ using animal_backend_domain.Types;
 
 namespace animal_backend_api.Controllers;
 
-public class ProductController(OpenAIClient openAIClient, IWebHostEnvironment environment) : BaseController
+public class ProductController(OpenAIClient? openAIClient, IWebHostEnvironment environment) : BaseController
 {
     [HttpGet]
     public async Task<IActionResult> GetAll([FromQuery] GetAllProductsQuery query)
@@ -103,6 +103,11 @@ public class ProductController(OpenAIClient openAIClient, IWebHostEnvironment en
     [HttpPost("chat")]
     public async Task<IActionResult> Chat([FromBody] ChatRequest request)
     {
+        if (openAIClient == null)
+        {
+            return BadRequest(new { reply = "AI funkcionalumas nėra prieinamas. OpenAI API raktas nesukonfigūruotas." });
+        }
+
         var productTypes = string.Join(", ", Enum.GetNames(typeof(ProductType)));
 
         var chatClient = openAIClient.GetChatClient("gpt-4o");

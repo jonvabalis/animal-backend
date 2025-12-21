@@ -10,10 +10,10 @@ namespace animal_backend_api.Hubs;
 
 public class ChatHub : Hub
 {
-    private readonly OpenAIClient _openAIClient;
+    private readonly OpenAIClient? _openAIClient;
     private readonly IMediator _mediator;
 
-    public ChatHub(OpenAIClient openAIClient, IMediator mediator)
+    public ChatHub(OpenAIClient? openAIClient, IMediator mediator)
     {
         _openAIClient = openAIClient;
         _mediator = mediator;

@@ -13,16 +13,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<animal_backend_core.Security.JwtTokenService>();
 
 // Add services to the container.
-builder.Services.AddSingleton(_ =>
+builder.Services.AddSingleton(sp =>
 {
     var apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY")
         ?? builder.Configuration["OpenAI:ApiKey"];
 
     if (string.IsNullOrEmpty(apiKey))
     {
-        throw new InvalidOperationException("OpenAI API key is not configured.");
+        return (OpenAIClient?)null; // Return null instead of throwing
     }
-    return new OpenAIClient(apiKey);
+    return (OpenAIClient?)new OpenAIClient(apiKey);
 });
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateProductCommand).Assembly));
 builder.Services.AddControllers();

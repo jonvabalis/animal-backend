@@ -8,8 +8,47 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace animal_backend_api.Controllers;
 
-public class UsersController : BaseController
+public class UsersController(IWebHostEnvironment environment) : BaseController
 {
+    [HttpPost("upload-image")]
+    public async Task<IActionResult> UploadImage(IFormFile file)
+    {
+        if (file == null || file.Length == 0)
+            return BadRequest("No file uploaded");
+
+        // Validate file type
+        var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp" };
+        var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
+        
+        if (!allowedExtensions.Contains(extension))
+            return BadRequest("Invalid file type. Allowed: jpg, jpeg, png, gif, webp");
+
+        // Validate file size (max 5MB)
+        if (file.Length > 5 * 1024 * 1024)
+            return BadRequest("File size exceeds 5MB limit");
+
+        // Generate unique filename
+        var fileName = $"{Guid.NewGuid()}{extension}";
+        var uploadsFolder = Path.Combine(environment.ContentRootPath, "wwwroot", "uploads", "profiles");
+        
+        // Ensure directory exists
+        if (!Directory.Exists(uploadsFolder))
+            Directory.CreateDirectory(uploadsFolder);
+
+        var filePath = Path.Combine(uploadsFolder, fileName);
+
+        // Save file
+        using (var stream = new FileStream(filePath, FileMode.Create))
+        {
+            await file.CopyToAsync(stream);
+        }
+
+        // Return the URL path that frontend can use
+        var photoUrl = $"/uploads/profiles/{fileName}";
+        
+        return Ok(new { photoUrl });
+    }
+
     [Authorize]
     [HttpGet("me")]
     public async Task<ActionResult<UserMeDto>> GetMe(CancellationToken ct)
