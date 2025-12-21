@@ -11,7 +11,7 @@ public class GetAllIllnessesQueryHandler(AnimalDbContext dbContext)
 {
     public async Task<List<IllnessInfoDto>> Handle(GetAllIllnessesQuery query, CancellationToken cancellationToken)
     {
-        var illnesses = await dbContext.Illnesses.ToListAsync(cancellationToken);
+        var illnesses = await dbContext.Illnesses.Where(i => i.AnimalId == query.animalId).ToListAsync(cancellationToken);
 
         return illnesses.Select(i => new IllnessInfoDto
         {
@@ -19,6 +19,7 @@ public class GetAllIllnessesQueryHandler(AnimalDbContext dbContext)
             Name = i.Name,
             Description = i.Description,
             DateDiagnosed = i.DateDiagnosed,
+            DiseaseId = i.DiseaseId
         }).ToList();
     }
 }

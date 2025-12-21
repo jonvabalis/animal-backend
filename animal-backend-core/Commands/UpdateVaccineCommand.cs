@@ -7,6 +7,7 @@ namespace animal_backend_core.Commands
         string Name,
         DateTime Date,
         string Description,
-        string Manufacturer
+        string Manufacturer,
+        Guid AnimalId
     ) : IRequest<Unit>;
 }

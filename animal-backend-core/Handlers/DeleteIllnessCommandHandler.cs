@@ -10,7 +10,7 @@ public class DeleteIllnessCommandHandler(AnimalDbContext dbContext)
     public async Task<Unit> Handle(DeleteIllnessCommand request, CancellationToken cancellationToken)
     {
         var illness = await dbContext.Illnesses
-            .FirstOrDefaultAsync(p => p.Id == request.Id, cancellationToken);
+            .FirstOrDefaultAsync(p => p.Id == request.Id && p.AnimalId == request.AnimalId, cancellationToken);
 
         if (illness is null)
         {

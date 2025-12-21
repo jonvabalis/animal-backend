@@ -2,7 +2,7 @@ using animal_backend_infrastructure;
 using MediatR;
 using animal_backend_core.Queries;
 using animal_backend_domain.Dtos;
-
+using Microsoft.EntityFrameworkCore;
 namespace animal_backend_core.Handlers;
 
 public class GetByIdProductUsedQueryHandler(AnimalDbContext dbContext)
@@ -10,8 +10,9 @@ public class GetByIdProductUsedQueryHandler(AnimalDbContext dbContext)
 {
     public async Task<ProductUsedInfoDto?> Handle(GetByIdProductUsedQuery request, CancellationToken cancellationToken)
     {
-        // TODO: adjust entity and mapping according to your domain model
-        var productUsed = await dbContext.ProductsUsed.FindAsync(new object[] { request.Id }, cancellationToken);
+
+        var productUsed = await dbContext.ProductsUsed.Where(p => p.AnimalId == request.AnimalId)
+            .FirstOrDefaultAsync(p => p.Id == request.Id, cancellationToken);
 
         if (productUsed is null)
         {
@@ -23,6 +24,7 @@ public class GetByIdProductUsedQueryHandler(AnimalDbContext dbContext)
             Id = productUsed.Id,
             Dosage = productUsed.Dosage,
             TimesPerDay = productUsed.TimesPerDay,
+            ProductId = productUsed.ProductId
         };
     }
 }

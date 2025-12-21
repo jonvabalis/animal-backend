@@ -2,5 +2,5 @@ using MediatR;
 
 namespace animal_backend_core.Commands
 {
-    public record DeleteProductUsedCommand(Guid Id) : IRequest<Unit>;
+    public record DeleteProductUsedCommand(Guid AnimalId, Guid Id) : IRequest<Unit>;
 }

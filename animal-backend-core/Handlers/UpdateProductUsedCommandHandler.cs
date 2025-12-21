@@ -10,7 +10,7 @@ public class UpdateProductUsedCommandHandler(AnimalDbContext dbContext)
     public async Task<Unit> Handle(UpdateProductUsedCommand request, CancellationToken cancellationToken)
     {
         var productUsed = await dbContext.ProductsUsed
-            .FirstOrDefaultAsync(v => v.Id == request.Id, cancellationToken);
+            .FirstOrDefaultAsync(v => v.Id == request.Id && v.AnimalId == request.AnimalId, cancellationToken);
 
         if (productUsed is null)
         {
@@ -19,6 +19,7 @@ public class UpdateProductUsedCommandHandler(AnimalDbContext dbContext)
 
         productUsed.Dosage = request.Dosage;
         productUsed.TimesPerDay = request.TimesPerDay;
+        productUsed.ProductId = request.ProductId;
 
         await dbContext.SaveChangesAsync(cancellationToken);
 

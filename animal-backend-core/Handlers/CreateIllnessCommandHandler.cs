@@ -13,7 +13,9 @@ public class CreateIllnessCommandHandler(AnimalDbContext dbContext)
         {
             Description = request.Description,
             Name = request.Name,
-            DateDiagnosed = request.DateDiagnosed
+            DateDiagnosed = request.DateDiagnosed,
+            AnimalId = request.AnimalId,
+            DiseaseId = request.DiseaseId
         };
 
         dbContext.Illnesses.Add(illness);
