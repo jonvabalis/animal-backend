@@ -18,6 +18,16 @@ public class NotFoundException : Exception
 public class CreateVeterinarianCommandHandler(AnimalDbContext dbContext)
 	: IRequestHandler<CreateVeterinarianCommand, Guid>
 {
+	private static DateTime NormalizeToUtc(DateTime value)
+	{
+		return value.Kind switch
+		{
+			DateTimeKind.Utc => value,
+			DateTimeKind.Local => value.ToUniversalTime(),
+			_ => DateTime.SpecifyKind(value, DateTimeKind.Utc)
+		};
+	}
+
 	public async Task<Guid> Handle(CreateVeterinarianCommand request, CancellationToken cancellationToken)
 	{
 		var email = request.Email.Trim().ToLowerInvariant();
@@ -32,13 +42,13 @@ public class CreateVeterinarianCommandHandler(AnimalDbContext dbContext)
 		var veterinarian = new Veterinarian
 		{
 			Id = Guid.NewGuid(),
-			BirthDate = request.BirthDate,
+			BirthDate = NormalizeToUtc(request.BirthDate),
 			Rank = request.Rank,
 			Responsibilities = request.Responsibilities,
 			Education = request.Education,
 			Salary = request.Salary,
 			FullTime = request.FullTime,
-			HireDate = request.HireDate,
+			HireDate = NormalizeToUtc(request.HireDate),
 			ExperienceYears = request.ExperienceYears,
 			Gender = request.Gender
 		};
