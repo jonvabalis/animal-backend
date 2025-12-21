@@ -92,6 +92,7 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 builder.Services.AddScoped<animal_backend_core.Security.JwtTokenService>();
+builder.Services.AddScoped<IEmailConfirmationService, EmailConfirmationService>();
 builder.Services.AddScoped<IEmailService, ZohoEmailService>();
 builder.Services.AddHostedService<VetVisitReminderCronJob>();
 builder.Services.AddHttpClient();

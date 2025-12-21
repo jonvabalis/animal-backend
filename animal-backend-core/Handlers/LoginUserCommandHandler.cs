@@ -23,6 +23,11 @@ public class LoginUserCommandHandler(
         if (user is null)
             throw new InvalidOperationException("Invalid email or password.");
 
+        if (!user.Confirmed)
+        {
+            throw new UnauthorizedAccessException("Please confirm your email before logging in.");
+        }
+        
         var ok = PasswordHasher.VerifyFromStorage(request.Request.Password, user.Password);
         if (!ok)
             throw new InvalidOperationException("Invalid email or password.");
