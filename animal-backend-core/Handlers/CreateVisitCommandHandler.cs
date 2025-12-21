@@ -59,6 +59,7 @@ public class CreateVisitCommandHandler(AnimalDbContext dbContext)
             Start = request.Start,
             End = request.End,
             Location = request.Location,
+            ReminderSent = false,
             Price = (double)request.Price,
             VeterinarianId = request.VeterinarianUuid,
             UserId = request.UserUuid

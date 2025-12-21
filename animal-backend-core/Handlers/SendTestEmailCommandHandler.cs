@@ -18,7 +18,8 @@ public class SendTestEmailHandler(IEmailService emailService)
 				request.PetName,
 				"Majamis",
 				DateTime.Now.AddDays(1),
-				$"{17}h - {19}h"
+				$"{17}h - {19}h",
+				"Veterinaras"
 			);
 
 			return new SendTestEmailResponse

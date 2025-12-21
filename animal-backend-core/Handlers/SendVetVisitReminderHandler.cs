@@ -28,13 +28,20 @@ public class SendVetVisitReminderHandler(IEmailService emailService, AnimalDbCon
 					VisitId = request.VisitId
 				};
 			}
+			
+			var veterinarian = await context.Users.FirstOrDefaultAsync(v => v.VeterinarianId == visit.VeterinarianId, cancellationToken);
+			if (veterinarian == null)
+			{
+				throw new Exception("Veterinarian not found");
+			}
 
 			await emailService.SendVetReminderAsync(
 				visit.User.Email,
 				visit.User.Name,
 				visit.Location,
 				visit.Start.Date,
-				$"{visit.Start.Hour}h - {visit.End.Hour}h"
+				$"{visit.Start.Hour}h - {visit.End.Hour}h",
+				$"{visit.Veterinarian.Responsibilities} {veterinarian.Name} {veterinarian.Surname}"
 			);
 
 			return new SendVetVisitReminderResponse

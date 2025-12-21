@@ -9,7 +9,7 @@ public class Visit : Entity
     public required DateTime End { get; set; }
     public required string Location { get; set; }
     public required double Price { get; set; }
-    
+    public required bool ReminderSent { get; set; }
     public Guid VeterinarianId { get; set; }
     public Veterinarian Veterinarian { get; set; } = null!;
     public Guid UserId { get; set; }

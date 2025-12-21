@@ -8,14 +8,14 @@ namespace animal_backend_core.Services;
 
 public interface IEmailService
 {
-	Task SendVetReminderAsync(string toEmail, string user, string place, DateTime visitDate, string range);
+	Task SendVetReminderAsync(string toEmail, string user, string place, DateTime visitDate, string range, string veterinarianName);
 }
 
 public class ZohoEmailService(IOptions<EmailSettings> emailSettings) : IEmailService
 {
     private readonly EmailSettings _emailSettings = emailSettings.Value;
 
-    public async Task SendVetReminderAsync(string toEmail, string user, string place, DateTime visitDate, string range)
+    public async Task SendVetReminderAsync(string toEmail, string user, string place, DateTime visitDate, string range, string veterinarianName)
     {
         try
         {
@@ -34,6 +34,7 @@ public class ZohoEmailService(IOptions<EmailSettings> emailSettings) : IEmailSer
                         <h2 style='color: #4CAF50;'>🐾 Upcoming Veterinarian Visit</h2>
                         <div style='background: #f5f5f5; padding: 20px; border-radius: 5px;'>
                             <p><strong>User:</strong> {user}</p>
+                            <p><strong>Veterinarian:</strong> {veterinarianName}</p>
                             <p><strong>Place:</strong> {place}</p>
                             <p><strong>Date:</strong> {visitDate:MMMM dd, yyyy}</p>
                             <p><strong>Time:</strong> {range}</p>
@@ -43,26 +44,6 @@ public class ZohoEmailService(IOptions<EmailSettings> emailSettings) : IEmailSer
             </body>
             </html>
         ";
-            
-            var emailPayload = new
-            {
-                from = new { email = "hello@demomailtrap.co", name = "Vet Clinic" },
-                to = new[] { new { email = toEmail } },
-                subject = $"Priminimas: Vet Visit for {user}",
-                html = $@"
-                    <div style='font-family: Arial; max-width: 600px; margin: 0 auto;'>
-                        <h2 style='color: #4CAF50;'>🐾 Upcoming Veterinarian Visit</h2>
-                        <div style='background: #f5f5f5; padding: 20px; border-radius: 5px;'>
-                            <p><strong>User:</strong> {user}</p>
-                            <p><strong>Place:</strong> {place}</p>
-                            <p><strong>Date:</strong> {visitDate:MMMM dd, yyyy}</p>
-                            <p><strong>Time:</strong> {range}</p>
-                        </div>
-                        <p>Please arrive 10 minutes early. See you soon!</p>
-                    </div>
-                ",
-                category = "Vet Reminders"
-            };
             
             var mailMessage = new MailMessage
             {

@@ -35,7 +35,7 @@ public class RegisterUserCommandHandler(
             Surname = request.Request.Surname,
             Email = email,
             Password = storedPassword,
-
+            Confirmed = false,
             Role = RoleType.Client,
             PhoneNumber = request.Request.PhoneNumber,
             PhotoUrl = request.Request.PhotoUrl ?? ""
