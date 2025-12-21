@@ -52,4 +52,15 @@ public class DiseaseController : BaseController
     {
         return Ok(await Mediator.Send(new DeleteDiseaseCommand(id)));
     }
+    
+    [HttpPost("find-by-symptoms")]
+    public async Task<IActionResult> FindBySymptoms([FromBody] FindDiseasesBySymptomsQuery query)
+    {
+        var result = await Mediator.Send(query);
+        
+        if (result.Success)
+            return Ok(result);
+        
+        return BadRequest(result);
+    }
 }
