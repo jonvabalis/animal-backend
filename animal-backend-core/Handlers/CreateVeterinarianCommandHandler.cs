@@ -61,6 +61,7 @@ public class CreateVeterinarianCommandHandler(AnimalDbContext dbContext)
 			Email = request.Email,
 			Password = PasswordHasher.HashForStorage(request.Password),
 			Role = animal_backend_domain.Types.RoleType.Veterinarian,
+			Confirmed = true,
 			PhoneNumber = request.PhoneNumber,
 			PhotoUrl = request.PhotoUrl,
 			VeterinarianId = veterinarian.Id,

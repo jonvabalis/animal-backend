@@ -7,6 +7,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using animal_backend_api.Hubs;
+using animal_backend_core.Services;
+using animal_backend_domain.Dtos;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,6 +40,7 @@ var jwtSection = builder.Configuration.GetSection("Jwt");
 var jwtKey = jwtSection["Key"] ?? throw new InvalidOperationException("Jwt:Key is missing");
 var jwtIssuer = jwtSection["Issuer"] ?? throw new InvalidOperationException("Jwt:Issuer is missing");
 var jwtAudience = jwtSection["Audience"] ?? throw new InvalidOperationException("Jwt:Audience is missing");
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -89,6 +92,10 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 builder.Services.AddScoped<animal_backend_core.Security.JwtTokenService>();
+builder.Services.AddScoped<IEmailConfirmationService, EmailConfirmationService>();
+builder.Services.AddScoped<IEmailService, ZohoEmailService>();
+builder.Services.AddHostedService<VetVisitReminderCronJob>();
+builder.Services.AddHttpClient();
 
 // CORS for frontend
 builder.Services.AddCors(options =>

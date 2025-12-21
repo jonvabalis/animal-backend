@@ -1,5 +1,6 @@
 using animal_backend_core.Commands;
 using animal_backend_core.Security;
+using animal_backend_core.Services;
 using animal_backend_domain.Dtos.Auth;
 using animal_backend_domain.Entities;
 using animal_backend_domain.Types;
@@ -11,8 +12,8 @@ namespace animal_backend_core.Handlers;
 
 public class RegisterUserCommandHandler(
     AnimalDbContext dbContext,
-    JwtTokenService jwtTokenService
-) : IRequestHandler<RegisterUserCommand, AuthResponseDto>
+    JwtTokenService jwtTokenService,
+    IEmailConfirmationService emailConfirmationService) : IRequestHandler<RegisterUserCommand, AuthResponseDto>
 {
     public async Task<AuthResponseDto> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
     {
@@ -35,7 +36,7 @@ public class RegisterUserCommandHandler(
             Surname = request.Request.Surname,
             Email = email,
             Password = storedPassword,
-
+            Confirmed = false,
             Role = RoleType.Client,
             PhoneNumber = request.Request.PhoneNumber,
             PhotoUrl = request.Request.PhotoUrl ?? ""
@@ -44,6 +45,12 @@ public class RegisterUserCommandHandler(
         dbContext.Users.Add(user);
         await dbContext.SaveChangesAsync(cancellationToken);
 
+        await emailConfirmationService.SendConfirmationEmailAsync(
+            user.Email, 
+            user.Name, 
+            user.Id
+        );
+        
         var token = jwtTokenService.CreateAccessToken(user);
 
         return new AuthResponseDto
