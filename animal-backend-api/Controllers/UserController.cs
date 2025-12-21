@@ -129,4 +129,27 @@ public class UsersController : BaseController
         await Mediator.Send(new DeleteMyProfileCommand(userId), ct);
         return NoContent();
     }
+    
+    [HttpPost("test")]
+    public async Task<IActionResult> SendTestEmail([FromBody] SendTestEmailCommand command)
+    {
+        var result = await Mediator.Send(command);
+        
+        if (result.Success)
+            return Ok(result);
+        
+        return BadRequest(result);
+    }
+    
+    [HttpPost("send-reminder/{visitId:guid}")]
+    public async Task<IActionResult> SendVisitReminder(Guid visitId)
+    {
+        var command = new SendVetVisitReminderCommand { VisitId = visitId };
+        var result = await Mediator.Send(command);
+        
+        if (result.Success)
+            return Ok(result);
+        
+        return NotFound(result);
+    }
 }
