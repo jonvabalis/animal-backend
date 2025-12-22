@@ -15,6 +15,12 @@ public class VisitController : BaseController
         return Ok(await Mediator.Send(query));
     }
 
+    [HttpGet("client")]
+    public async Task<IActionResult> GetAllClient([FromQuery] GetAllClientVisitsQuery query)
+    {
+        return Ok(await Mediator.Send(query));
+    }
+
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById([FromRoute] Guid id)
     {
