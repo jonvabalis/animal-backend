@@ -73,8 +73,8 @@ public class VeterinarianController : BaseController
         return Ok(await Mediator.Send(new DeleteVeterinarianCommand(id)));
     }
 
-   [HttpGet("excel")]
-    public async Task<IActionResult> DownloadVeterinariansExcel([FromServices] animal_backend_infrastructure.AnimalDbContext context)
+   [HttpPost("excel")]
+    public async Task<IActionResult> DownloadVeterinariansExcel([FromServices] animal_backend_infrastructure.AnimalDbContext context, [FromBody] DateRangeRequest request)
     {
         // Load veterinarians with their visits
         var veterinarians = await context.Veterinarians
@@ -140,7 +140,11 @@ public class VeterinarianController : BaseController
             
             double vetSum = 0;
             double timeDuration = 0;
-            var visits = vet.Visits.OrderBy(v => v.Start).ToList();
+            var visits = vet.Visits
+                .Where(v => (request.StartDate == null || v.Start >= request.StartDate) && 
+                            (request.EndDate == null || v.Start <= request.EndDate))
+                .OrderBy(v => v.Start)
+                .ToList();
             foreach (var visit in visits)
             {
                 ws.Cell(row, 1).Value = visit.Start;
@@ -229,4 +233,10 @@ public class VeterinarianController : BaseController
         var bytes = ms.ToArray();
         return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "veterinarians_with_visits.xlsx");
     }
+}
+
+public class DateRangeRequest
+{
+    public DateTime? StartDate { get; set; }
+    public DateTime? EndDate { get; set; }
 }

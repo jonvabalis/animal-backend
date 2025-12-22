@@ -10,7 +10,15 @@ public class CreateVisitCommandHandler(AnimalDbContext dbContext)
 {
     public async Task<Guid> Handle(CreateVisitCommand request, CancellationToken cancellationToken)
     {
-        if (request.Start > request.End || request.Start < DateTime.Now)
+        // Convert incoming DateTimes to UTC for PostgreSQL
+        var startUtc = request.Start.Kind == DateTimeKind.Utc 
+            ? request.Start 
+            : request.Start.ToUniversalTime();
+        var endUtc = request.End.Kind == DateTimeKind.Utc 
+            ? request.End 
+            : request.End.ToUniversalTime();
+        
+        if (startUtc > endUtc || startUtc < DateTime.UtcNow)
         {
             throw new InvalidOperationException("Invalid start or end hour.");
         }
@@ -46,7 +54,7 @@ public class CreateVisitCommandHandler(AnimalDbContext dbContext)
 
         foreach (var workHour in workHours)
         {
-            if (workHour.Hour >= startHour && workHour.Hour <= endHour)
+            if (workHour.Hour >= startHour && workHour.Hour < endHour)
             {
                 workHour.Taken = true;
             }
@@ -56,8 +64,8 @@ public class CreateVisitCommandHandler(AnimalDbContext dbContext)
         {
             Id = Guid.NewGuid(),
             Type = request.Type,
-            Start = request.Start,
-            End = request.End,
+            Start = startUtc,
+            End = endUtc,
             Location = request.Location,
             ReminderSent = false,
             Price = (double)request.Price,

@@ -42,12 +42,10 @@ public class VisitController : BaseController
         return Ok(await Mediator.Send(command));
     }
     
-    [HttpPut("{id}")]
-    public async Task<IActionResult> Update(Guid id, [FromBody] UpdateVisitCommand command)
+    [HttpPut]
+    public async Task<IActionResult> Update([FromBody] UpdateVisitCommand command)
     {
-        var updateCommand = command with { Id = id };
-
-        return Ok(await Mediator.Send(updateCommand));
+        return Ok(await Mediator.Send(command));
     }
 
     [HttpDelete("{id}")]

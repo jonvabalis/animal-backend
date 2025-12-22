@@ -9,7 +9,15 @@ public class UpdateVisitCommandHandler(AnimalDbContext dbContext)
 {
     public async Task<Unit> Handle(UpdateVisitCommand request, CancellationToken cancellationToken)
     {
-        if (request.Start > request.End || request.Start > DateTime.Now)
+        // Convert incoming DateTimes to UTC for PostgreSQL
+        var startUtc = request.Start.Kind == DateTimeKind.Utc 
+            ? request.Start 
+            : request.Start.ToUniversalTime();
+        var endUtc = request.End.Kind == DateTimeKind.Utc 
+            ? request.End 
+            : request.End.ToUniversalTime();
+        
+        if (startUtc > endUtc || startUtc < DateTime.UtcNow)
         {
             throw new InvalidOperationException("Invalid start or end hour.");
         }
@@ -23,8 +31,8 @@ public class UpdateVisitCommandHandler(AnimalDbContext dbContext)
         }
 
         visit.Type = request.Type;
-        visit.Start = request.Start;
-        visit.End = request.End;
+        visit.Start = startUtc;
+        visit.End = endUtc;
         visit.Location = request.Location;
         visit.Price = (double)request.Price;
 
