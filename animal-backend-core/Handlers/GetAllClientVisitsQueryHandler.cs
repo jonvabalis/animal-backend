@@ -6,13 +6,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace animal_backend_core.Handlers;
 
-public class GetAllVisitsQueryHandler(AnimalDbContext dbContext)
-    : IRequestHandler<GetAllVisitsQuery, List<VisitInfoDto>>
+public class GetAllClientVisitsQueryHandler(AnimalDbContext dbContext)
+    : IRequestHandler<GetAllClientVisitsQuery, List<VisitInfoDto>>
 {
-    public async Task<List<VisitInfoDto>> Handle(GetAllVisitsQuery query, CancellationToken cancellationToken)
+    public async Task<List<VisitInfoDto>> Handle(GetAllClientVisitsQuery query, CancellationToken cancellationToken)
     {
-        var visits = await dbContext.Visits.ToListAsync(cancellationToken);
-
+        var visits = await dbContext.Visits.Where(v => v.UserId == query.id).ToListAsync(cancellationToken);
         return visits.Select(v => new VisitInfoDto
         {
             Id = v.Id,
