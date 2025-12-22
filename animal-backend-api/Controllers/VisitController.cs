@@ -21,6 +21,13 @@ public class VisitController : BaseController
         return Ok(await Mediator.Send(query));
     }
 
+    [HttpGet("veterinarian")]
+    public async Task<IActionResult> GetAllVetVisits([FromQuery] GetAllVetVisitsQuery query)
+    {
+        return Ok(await Mediator.Send(query));
+    }
+    
+
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById([FromRoute] Guid id)
     {
