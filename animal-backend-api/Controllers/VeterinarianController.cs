@@ -19,6 +19,9 @@ public class VeterinarianController : BaseController
     {
         return Ok(await Mediator.Send(new GetAllVeterinariansQuery()));
     }
+
+    
+
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById([FromRoute] Guid id)
     {
